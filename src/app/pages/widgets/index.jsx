@@ -36,7 +36,7 @@ import { EmojiObjectsOutlined, FolderOpen } from "@mui/icons-material";
 import { Container, Grid } from "@mui/material";
 import { useTranslation } from "react-i18next";
 import { SignupForm1 } from "@app/_components/auth/signup/samplelogin";
-
+import { StudentTableWidget } from "@app/_components/auth/signup/StudentTable";
 import { SaveWidget } from "@app/_components/auth/signup/studentform";
 
 
@@ -55,11 +55,14 @@ export function WidgetsPage() {
       disableGutters
     >
       <Grid container spacing={3.75}>
-          <Grid item xs={6} lg={4}>
-          <SaveWidget title={t("widgets.title.SaveWidget")} scrollHeight={296}/>
+          <Grid item xs={10} lg={6}>
+          <StudentTableWidget title={t("widgets.title.StudentTableWidget")} />
         </Grid>
-        <Grid item xs={6} lg={4}>
-          <SignupForm1 title={t("widgets.title.SignupForm1")} scrollHeight={296}/>
+         <Grid item xs={6} lg={4}>
+          <SaveWidget title={t("widgets.title.SaveWidget")} />
+        </Grid>
+        <Grid item xs={7} lg={4}>
+          <SignupForm1 title={t("widgets.title.SignupForm1")} />
         </Grid>
         <Grid item xs={12} lg={6}>
           <PortfolioBalance title={t("widgets.title.cryptoPortfolio")} />
