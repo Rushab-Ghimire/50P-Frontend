@@ -35,6 +35,10 @@ import { CONTAINER_MAX_WIDTH } from "@app/_config/layouts";
 import { EmojiObjectsOutlined, FolderOpen } from "@mui/icons-material";
 import { Container, Grid } from "@mui/material";
 import { useTranslation } from "react-i18next";
+import { SignupForm1 } from "@app/_components/auth/signup/samplelogin";
+
+
+
 
 export function WidgetsPage() {
   const { t } = useTranslation();
@@ -51,6 +55,9 @@ export function WidgetsPage() {
       disableGutters
     >
       <Grid container spacing={3.75}>
+        <Grid item xs={6} lg={4}>
+          <SignupForm1 title={t("widgets.title.SignupForm1")} scrollHeight={296}/>
+        </Grid>
         <Grid item xs={12} lg={6}>
           <PortfolioBalance title={t("widgets.title.cryptoPortfolio")} />
         </Grid>
