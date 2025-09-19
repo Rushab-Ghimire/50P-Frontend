@@ -11,10 +11,10 @@ import {
 import { lineData } from "../..";
 import { JumboCard } from "@jumbo/components";
 
-const SimpleLineChart = () => {
+const SimpleLineChart = ({ title }) => {
   return (
     <JumboCard
-      title={"Simple Line Chart"}
+      title={title}
       contentWrapper
       contentSx={{ backgroundColor: "background.paper" }}
     >

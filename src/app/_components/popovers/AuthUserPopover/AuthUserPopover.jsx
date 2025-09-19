@@ -18,15 +18,41 @@ import { authUser } from "./data";
 import { JumboDdPopover } from "@jumbo/components/JumboDdPopover";
 import { useAuth } from "@app/_components/_core/AuthProvider/hooks";
 import { useNavigate } from "react-router-dom";
+import { useCallback, useEffect, useState } from "react";
+import { GLOBAL } from "@app/_utilities/globals";
 
 const AuthUserPopover = () => {
   const { theme } = useJumboTheme();
-  const { logout } = useAuth();
+  const { logout, userDetail } = useAuth();
+  const [app, setApp] = useState("");
   const navigate = useNavigate();
 
+  useEffect(() => {
+    getAppUserDetail();
+  }, []);
+
+  const getAppUserDetail = useCallback(() => {
+    if (Object.keys(GLOBAL.userDetail).length <= 0) {
+      setTimeout(() => {
+        getAppUserDetail();
+      }, 2000);
+    } else {
+      if (GLOBAL.userDetail?.organizations[0]?.organization.business.id == 1) {
+        setApp("askdaysi");
+      } else {
+        setApp("salon");
+      }
+    }
+  });
+
   async function handleLogout() {
-    await logout();
-    return navigate("/auth/login-1");
+    if (GLOBAL.userDetail?.organizations[0]?.organization.business.id == 1) {
+      await logout();
+      navigate("/");
+    } else {
+      await logout();
+      navigate("/");
+    }
   }
 
   return (
@@ -34,12 +60,12 @@ const AuthUserPopover = () => {
       <JumboDdPopover
         triggerButton={
           <Avatar
-            src={authUser?.profile_pic}
+            src={userDetail?.profile_pic}
             sizes={"small"}
             sx={{ boxShadow: 23, cursor: "pointer" }}
           />
         }
-        sx={{ ml: 3 }}
+        sx={{ ml: { xs: 0, mc: 3 } }}
       >
         <Div
           sx={{
@@ -50,31 +76,33 @@ const AuthUserPopover = () => {
           }}
         >
           <Avatar
-            src={authUser?.profile_pic}
-            alt={authUser.name}
+            src={userDetail?.profile_pic}
+            alt={userDetail.first_name + " " + userDetail.last_name}
             sx={{ width: 60, height: 60, mb: 2 }}
           />
-          <Typography variant={"h5"}>{authUser.name}</Typography>
+          <Typography variant={"h5"}>
+            {userDetail.first_name + " " + userDetail.last_name}
+          </Typography>
           <Typography variant={"body1"} color="text.secondary">
-            {authUser.handle}
+            {userDetail.email}
           </Typography>
         </Div>
         <Divider />
         <nav>
           <List disablePadding sx={{ pb: 1 }}>
-            <ListItemButton>
+            {/* <ListItemButton>
               <ListItemIcon sx={{ minWidth: 36 }}>
                 <PersonOutlineIcon />
               </ListItemIcon>
               <ListItemText primary="Profile" sx={{ my: 0 }} />
-            </ListItemButton>
-            <ListItemButton>
+            </ListItemButton> */}
+            <ListItemButton onClick={() => navigate(`/${app}/edit-profile`)}>
               <ListItemIcon sx={{ minWidth: 36 }}>
                 <EditOutlinedIcon />
               </ListItemIcon>
               <ListItemText primary="Edit Profile" sx={{ my: 0 }} />
             </ListItemButton>
-            <ListItemButton>
+            {/* <ListItemButton>
               <ListItemIcon sx={{ minWidth: 36 }}>
                 <RepeatOutlinedIcon />
               </ListItemIcon>
@@ -83,7 +111,7 @@ const AuthUserPopover = () => {
                 primary="Switch User"
                 sx={{ my: 0 }}
               />
-            </ListItemButton>
+            </ListItemButton> */}
             <ListItemButton onClick={handleLogout}>
               <ListItemIcon sx={{ minWidth: 36 }}>
                 <LogoutIcon />

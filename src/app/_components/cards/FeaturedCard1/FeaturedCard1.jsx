@@ -2,10 +2,11 @@ import { Div } from "@jumbo/shared";
 import { Card, CardActions, CardContent, Typography } from "@mui/material";
 import React from "react";
 import PropTypes from "prop-types";
+import { Colors } from "@app/_themes/TileFlex";
 
 //TODO: need to handle the bgcolor (degree identification)
 function FeaturedCard1({
-  bgcolor = ["135deg", "#38B8F2", "#843CF6"],
+  bgcolor = ["135deg", "#000000", "#ffffff"],
   icon,
   title,
   subheader,
@@ -14,7 +15,8 @@ function FeaturedCard1({
     <Card
       sx={{
         height: 115,
-        backgroundImage: `linear-gradient(${bgcolor.toString()})`,
+        backgroundColor: Colors.light_blue,
+        //backgroundImage: `linear-gradient(${bgcolor.toString()})`,
       }}
     >
       <CardActions

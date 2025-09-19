@@ -4,13 +4,14 @@ import { ListItem, ListItemIcon, ListItemText } from "@mui/material";
 import List from "@mui/material/List";
 import React from "react";
 import { Cell, Pie, PieChart, ResponsiveContainer } from "recharts";
+import { Colors } from "@app/_themes/TileFlex";
 
 const data = [
   { name: "Android", value: 400 },
   { name: "iOS", value: 300 },
   { name: "Web", value: 300 },
 ];
-const COLORS = ["#7352C7", "#E73145", "#3BD2A2"];
+const COLORS = [Colors.dark_blue, Colors.dark_blue_1, Colors.light_blue];
 
 const ListItemInline = styled(ListItem)(() => ({
   width: "auto",
@@ -58,7 +59,7 @@ const ChartAppUsers = () => {
               sx={{ color: COLORS[0], fontSize: "14px" }}
             />
           </ListItemIcon>
-          <ListItemText primary="Android" />
+          <ListItemText primary="Lead" />
         </ListItemInline>
         <ListItemInline>
           <ListItemIcon sx={{ minWidth: 16 }}>
@@ -66,7 +67,7 @@ const ChartAppUsers = () => {
               sx={{ color: COLORS[1], fontSize: "14px" }}
             />
           </ListItemIcon>
-          <ListItemText primary="iOS" />
+          <ListItemText primary="Follow" />
         </ListItemInline>
         <ListItemInline>
           <ListItemIcon sx={{ minWidth: 16 }}>
@@ -74,7 +75,7 @@ const ChartAppUsers = () => {
               sx={{ color: COLORS[2], fontSize: "14px" }}
             />
           </ListItemIcon>
-          <ListItemText primary="Web" />
+          <ListItemText primary="Order" />
         </ListItemInline>
       </List>
     </React.Fragment>

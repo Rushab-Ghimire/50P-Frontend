@@ -19,15 +19,15 @@ export function ContentLayout({
       <JumboLayoutProvider
         layoutConfig={{
           header: {
+            hide: true,
             fixed: false,
             plain: true,
             ...headerOptions,
           },
           sidebar: {
-            open: true,
+            open: false,
             hide: false,
             variant: SIDEBAR_VARIANTS.PERMANENT,
-            style: SIDEBAR_STYLES.CLIPPED_UNDER_HEADER,
             plain: true,
             ...sidebarOptions,
           },

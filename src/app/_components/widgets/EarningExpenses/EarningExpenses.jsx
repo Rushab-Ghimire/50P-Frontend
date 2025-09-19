@@ -12,7 +12,7 @@ function EarningExpenses() {
         avatar={
           <Div>
             <Typography variant={"h3"} fontWeight={"500"} mb={0.5}>
-              $2,95,437
+              $15,437
             </Typography>
             <Typography variant={"body1"} mb={2}>
               Earning
@@ -22,7 +22,7 @@ function EarningExpenses() {
         title={
           <Div>
             <Typography variant={"h3"} fontWeight={"500"} mb={0.5}>
-              $58,786
+              $8,786
             </Typography>
             <Typography variant={"body1"} mb={2}>
               Expenses

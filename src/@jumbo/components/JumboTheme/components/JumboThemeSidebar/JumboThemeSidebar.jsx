@@ -1,9 +1,8 @@
-import PropTypes from "prop-types";
-
 import { createTheme } from "@mui/material/styles";
 import React from "react";
 import { JumboThemeSidebarContext } from "./JumboThemeSidebarContext";
 import { themeConfig } from "../../JumboTheme";
+import PropTypes from "prop-types";
 
 const JumboThemeSidebar = ({ children, init }) => {
   //todo: we can setup a default theme for sidebar here instead of {}

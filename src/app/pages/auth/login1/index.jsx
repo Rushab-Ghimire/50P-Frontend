@@ -30,11 +30,11 @@ export default function Login1() {
         p: (theme) => theme.spacing(4),
       }}
     >
-      <Div sx={{ mb: 3, display: "inline-flex" }}>
+      {/* <Div sx={{ mb: 3, display: "inline-flex" }}>
         <Link to="/" underline="none" sx={{ display: "inline-flex" }}>
           <img src={`${ASSET_IMAGES}/logo.png`} alt="Jumbo React" />
         </Link>
-      </Div>
+      </Div> */}
       <Card sx={{ maxWidth: "100%", width: 360, mb: 4 }}>
         <Div sx={{ position: "relative", height: "200px" }}>
           <CardMedia

@@ -36,86 +36,86 @@ const ProfileHeader = () => {
         <Avatar
           sx={{ width: { xs: 48, sm: 72 }, height: { xs: 48, sm: 72 } }}
           alt={"Remy Sharp"}
-          src={getAssetPath(`${ASSET_AVATARS}/avatar3.jpg`, "72x72")}
+          src={getAssetPath(`${ASSET_AVATARS}/avatar4.jpg`, "72x72")}
         />
       }
       title={
         <Typography fontSize={18} variant={"body1"} color={"inherit"}>
-          Kiley Brown
+          Manish Tandukar
         </Typography>
       }
       subheader={
         <Typography fontSize={12} variant={"body1"} color={"inherit"} mt={0.5}>
-          Florida, USA
+          Lalitpur, Nepal
         </Typography>
       }
-      children={
-        <Stack
-          direction={"row"}
-          justifyContent={"space-evenly"}
-          divider={<Divider orientation="vertical" flexItem />}
-          spacing={2}
-          sx={{
-            mx: 1,
-          }}
-        >
-          <Item>
-            <Typography variant={"h6"} color={"inherit"} mb={0}>
-              457
-            </Typography>
-            <Typography variant={"body1"} fontSize={12}>
-              Followers
-            </Typography>
-          </Item>
-          <Item>
-            <Typography variant={"h6"} color={"inherit"} mb={0}>
-              689
-            </Typography>
-            <Typography variant={"body1"} fontSize={12}>
-              Friends
-            </Typography>
-          </Item>
-          <Item>
-            <Typography variant={"h6"} color={"inherit"} mb={0}>
-              283
-            </Typography>
-            <Typography variant={"body1"} fontSize={12}>
-              Following
-            </Typography>
-          </Item>
-        </Stack>
-      }
-      tabs={
-        <List
-          disablePadding
-          sx={{
-            display: "flex",
-            minWidth: 0,
-          }}
-        >
-          <StyledMenuItem>Timeline</StyledMenuItem>
-          <StyledMenuItem>About</StyledMenuItem>
-          <StyledMenuItem>Photos</StyledMenuItem>
-          <StyledMenuItem>Friends</StyledMenuItem>
-          <StyledMenuItem>More</StyledMenuItem>
-        </List>
-      }
-      action={
-        <Button
-          disableRipple
-          variant="text"
-          startIcon={<SettingsIcon />}
-          sx={{
-            color: "inherit",
-            textTransform: "none",
-            "&:hover": {
-              backgroundColor: "transparent",
-            },
-          }}
-        >
-          Settings
-        </Button>
-      }
+      // children={
+      //   <Stack
+      //     direction={"row"}
+      //     justifyContent={"space-evenly"}
+      //     divider={<Divider orientation="vertical" flexItem />}
+      //     spacing={2}
+      //     sx={{
+      //       mx: 1,
+      //     }}
+      //   >
+      //     <Item>
+      //       <Typography variant={"h6"} color={"inherit"} mb={0}>
+      //         457
+      //       </Typography>
+      //       <Typography variant={"body1"} fontSize={12}>
+      //         Followers
+      //       </Typography>
+      //     </Item>
+      //     <Item>
+      //       <Typography variant={"h6"} color={"inherit"} mb={0}>
+      //         689
+      //       </Typography>
+      //       <Typography variant={"body1"} fontSize={12}>
+      //         Friends
+      //       </Typography>
+      //     </Item>
+      //     <Item>
+      //       <Typography variant={"h6"} color={"inherit"} mb={0}>
+      //         283
+      //       </Typography>
+      //       <Typography variant={"body1"} fontSize={12}>
+      //         Following
+      //       </Typography>
+      //     </Item>
+      //   </Stack>
+      // }
+      // tabs={
+      //   <List
+      //     disablePadding
+      //     sx={{
+      //       display: "flex",
+      //       minWidth: 0,
+      //     }}
+      //   >
+      //     <StyledMenuItem>Timeline</StyledMenuItem>
+      //     <StyledMenuItem>About</StyledMenuItem>
+      //     <StyledMenuItem>Photos</StyledMenuItem>
+      //     <StyledMenuItem>Friends</StyledMenuItem>
+      //     <StyledMenuItem>More</StyledMenuItem>
+      //   </List>
+      // }
+      // action={
+      //   <Button
+      //     disableRipple
+      //     variant="text"
+      //     startIcon={<SettingsIcon />}
+      //     sx={{
+      //       color: "inherit",
+      //       textTransform: "none",
+      //       "&:hover": {
+      //         backgroundColor: "transparent",
+      //       },
+      //     }}
+      //   >
+      //     Settings
+      //   </Button>
+      // }
       sx={{
         position: "relative",
         zIndex: 1,

@@ -56,55 +56,6 @@ export const sidebarTheme = {
       hover: "#F5F7FA",
     },
   },
-  typography: {
-    fontFamily: "NoirPro, Arial",
-    fontSize: 14,
-    h1: {
-      fontSize: "1.5rem",
-      lineHeight: 1.2,
-      fontWeight: 400,
-      color: "#000",
-      margin: "0 0 .5rem",
-    },
-    h2: {
-      fontSize: "1.4rem",
-      lineHeight: 1.2,
-      fontWeight: 400,
-      color: "#000",
-      margin: "0 0 .5rem",
-    },
-    h3: {
-      fontSize: "1.25rem",
-      lineHeight: 1.2,
-      fontWeight: 400,
-      color: "#000",
-      margin: "0 0 .5rem",
-    },
-    h4: {
-      fontSize: "1.1rem",
-      lineHeight: 1.2,
-      fontWeight: 400,
-      color: "#000",
-      margin: "0 0 .5rem",
-    },
-    h5: {
-      fontSize: "1rem",
-      lineHeight: 1.2,
-      fontWeight: 400,
-      color: "#000000",
-      margin: "0 0 .5rem",
-    },
-    h6: {
-      fontSize: ".875rem",
-      lineHeight: 1.2,
-      fontWeight: 400,
-      color: "#000",
-      margin: "0 0 .5rem",
-    },
-    body1: {
-      fontSize: ".875rem",
-    },
-  },
   jumboComponents: {
     JumboNavbar: {
       nav: {

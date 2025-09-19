@@ -7,7 +7,6 @@ function NewConnections({ title, scrollHeight }) {
   return (
     <JumboCard
       title={title}
-      subheader={title}
       action={
         <Button variant={"contained"} size={"small"}>
           See all

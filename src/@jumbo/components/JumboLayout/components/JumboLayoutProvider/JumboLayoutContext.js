@@ -11,7 +11,6 @@ const defaultLayoutOptions = {
   header: {
     hide: false,
     fixed: true,
-    plain: false,
   },
   sidebar: {
     open: true,
@@ -24,15 +23,12 @@ const defaultLayoutOptions = {
     style: SIDEBAR_STYLES.FULL_HEIGHT,
     view: SIDEBAR_VIEWS.FULL,
     drawer: true,
-    plain: false,
   },
   footer: {
     hide: false,
   },
   root: {},
   content: {},
-  wrapper: {},
-  main: {},
 };
 
 const defaultLayoutContext = {
@@ -42,17 +38,13 @@ const defaultLayoutContext = {
   footerOptions: defaultLayoutOptions.footer,
   rootOptions: defaultLayoutOptions.root,
   contentOptions: defaultLayoutOptions.content,
-  wrapperOptions: defaultLayoutOptions.wrapper,
-  mainOptions: defaultLayoutOptions.main,
-  setMainOptions: () => {},
   setSidebarOptions: () => {},
   setRootOptions: () => {},
   setContentOptions: () => {},
   setFooterOptions: () => {},
   setOptions: () => {},
   setHeaderOptions: () => {},
-  setWrapperOptions: () => {},
 };
 const JumboLayoutContext = React.createContext(defaultLayoutContext);
 
-export { defaultLayoutContext, defaultLayoutOptions, JumboLayoutContext };
+export { JumboLayoutContext, defaultLayoutContext, defaultLayoutOptions };

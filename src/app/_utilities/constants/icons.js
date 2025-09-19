@@ -50,7 +50,121 @@ import EmailOutlinedIcon from "@mui/icons-material/EmailOutlined";
 import LeaderboardOutlinedIcon from "@mui/icons-material/LeaderboardOutlined";
 import WidgetsOutlinedIcon from "@mui/icons-material/WidgetsOutlined";
 
+import TimelineIcon from "@mui/icons-material/Timeline";
+import AccountTreeOutlinedIcon from "@mui/icons-material/AccountTreeOutlined";
+import BusinessOutlinedIcon from "@mui/icons-material/BusinessOutlined";
+import SummarizeOutlinedIcon from "@mui/icons-material/SummarizeOutlined";
+import GroupOutlinedIcon from "@mui/icons-material/GroupOutlined";
+import DashboardOutlinedIcon from "@mui/icons-material/DashboardOutlined";
+import SchoolOutlinedIcon from "@mui/icons-material/SchoolOutlined";
+import TipsAndUpdatesOutlinedIcon from "@mui/icons-material/TipsAndUpdatesOutlined";
+import FunctionsOutlinedIcon from "@mui/icons-material/FunctionsOutlined";
+import SmartphoneOutlinedIcon from "@mui/icons-material/SmartphoneOutlined";
+import HandshakeOutlinedIcon from "@mui/icons-material/HandshakeOutlined";
+import MedicationOutlinedIcon from "@mui/icons-material/MedicationOutlined";
+import UpdateIcon from "@mui/icons-material/Update";
+import StackedBarChartOutlinedIcon from "@mui/icons-material/StackedBarChartOutlined";
+import EventBusyOutlinedIcon from "@mui/icons-material/EventBusyOutlined";
+import EventRepeatOutlinedIcon from "@mui/icons-material/EventRepeatOutlined";
+import MonitorHeartOutlinedIcon from "@mui/icons-material/MonitorHeartOutlined";
+import ScienceOutlinedIcon from "@mui/icons-material/ScienceOutlined";
+
 const APP_ICONS = [
+  {
+    name: "lab",
+    Component: ScienceOutlinedIcon,
+    props: { sx: { fontSize: 20 } },
+  },
+  {
+    name: "heartbeat",
+    Component: MonitorHeartOutlinedIcon,
+    props: { sx: { fontSize: 20 } },
+  },
+  {
+    name: "reshedule",
+    Component: EventRepeatOutlinedIcon,
+    props: { sx: { fontSize: 20 } },
+  },
+  {
+    name: "cancel",
+    Component: EventBusyOutlinedIcon,
+    props: { sx: { fontSize: 20 } },
+  },
+  {
+    name: "queue",
+    Component: StackedBarChartOutlinedIcon,
+    props: { sx: { fontSize: 20 } },
+  },
+  {
+    name: "availability",
+    Component: UpdateIcon,
+    props: { sx: { fontSize: 20 } },
+  },
+  {
+    name: "medicine",
+    Component: MedicationOutlinedIcon,
+    props: { sx: { fontSize: 20 } },
+  },
+  {
+    name: "handshake",
+    Component: HandshakeOutlinedIcon,
+    props: { sx: { fontSize: 20 } },
+  },
+  {
+    name: "phone",
+    Component: SmartphoneOutlinedIcon,
+    props: { sx: { fontSize: 20 } },
+  },
+  {
+    name: "agent",
+    Component: SchoolOutlinedIcon,
+    props: { sx: { fontSize: 20 } },
+  },
+  {
+    name: "knowledge",
+    Component: TipsAndUpdatesOutlinedIcon,
+    props: { sx: { fontSize: 20 } },
+  },
+  {
+    name: "function",
+    Component: FunctionsOutlinedIcon,
+    props: { sx: { fontSize: 20 } },
+  },
+  {
+    name: "dashboard",
+    Component: DashboardOutlinedIcon,
+    props: { sx: { fontSize: 20 } },
+  },
+  {
+    name: "people",
+    Component: GroupOutlinedIcon,
+    props: { sx: { fontSize: 20 } },
+  },
+  {
+    name: "report",
+    Component: SummarizeOutlinedIcon,
+    props: { sx: { fontSize: 20 } },
+  },
+  {
+    name: "process",
+    Component: AccountTreeOutlinedIcon,
+    props: { sx: { fontSize: 20 } },
+  },
+  {
+    name: "business",
+    Component: BusinessOutlinedIcon,
+    props: { sx: { fontSize: 20 } },
+  },
+  {
+    name: "ui",
+    Component: GridViewIcon,
+    props: { sx: { fontSize: 20 } },
+  },
+  {
+    name: "timeline",
+    Component: TimelineIcon,
+    props: { sx: { fontSize: 20 } },
+  },
   { name: "misc", Component: GraphicEqIcon, props: { sx: { fontSize: 20 } } },
   {
     name: "crypto",

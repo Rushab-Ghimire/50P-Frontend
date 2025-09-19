@@ -7,6 +7,9 @@ import {
   Tooltip,
 } from "recharts";
 
+import { mainTheme } from "@app/_themes/main/default";
+import { Colors } from "@app/_themes/TileFlex";
+
 const ChartSalesOverview = (props) => {
   return (
     <ResponsiveContainer height={192}>
@@ -76,7 +79,7 @@ const ChartSalesOverview = (props) => {
           stackId="2"
           strokeWidth={2}
           fillOpacity={0.7}
-          stroke={"#51459E"}
+          stroke={Colors.dark_blue_1}
           fill="url(#colorUv)"
         />
         <Area
@@ -85,7 +88,7 @@ const ChartSalesOverview = (props) => {
           stackId="1"
           strokeWidth={2}
           fillOpacity={0.7}
-          stroke={"#F39711"}
+          stroke={Colors.light_blue}
           fill="url(#colorUv1)"
         />
       </AreaChart>

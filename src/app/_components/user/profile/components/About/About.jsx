@@ -3,6 +3,7 @@ import React from "react";
 import {
   Avatar,
   AvatarGroup,
+  Button,
   List,
   ListItem,
   ListItemIcon,
@@ -12,16 +13,18 @@ import {
   Typography,
   styled,
 } from "@mui/material";
-import ApartmentIcon from "@mui/icons-material/Apartment";
-import CakeOutlinedIcon from "@mui/icons-material/CakeOutlined";
-import SchoolOutlinedIcon from "@mui/icons-material/SchoolOutlined";
-import CottageOutlinedIcon from "@mui/icons-material/CottageOutlined";
-import GroupsOutlinedIcon from "@mui/icons-material/GroupsOutlined";
 import { Div } from "@jumbo/shared";
 import { JumboCard } from "@jumbo/components";
 import { getAssetPath } from "@app/_utilities/helpers";
 import { ASSET_AVATARS } from "@app/_utilities/constants/paths";
 import { TabContext, TabList } from "@mui/lab";
+
+import PersonOutlineIcon from "@mui/icons-material/PersonOutline";
+import EmailOutlinedIcon from "@mui/icons-material/EmailOutlined";
+import LocalPhoneOutlinedIcon from "@mui/icons-material/LocalPhoneOutlined";
+import BusinessOutlinedIcon from "@mui/icons-material/BusinessOutlined";
+import BadgeOutlinedIcon from "@mui/icons-material/BadgeOutlined";
+import { Link } from "react-router-dom";
 
 const StyledListItemIcon = styled(ListItemIcon)(({ theme }) => ({
   color: theme.palette.primary.main,
@@ -46,25 +49,15 @@ const About = () => {
 
   return (
     <JumboCard
-      title={"About"}
+      title={"Profile"}
       action={
-        <TabContext value={value}>
-          <Div
-            sx={{
-              marginTop: -2.25,
-              marginBottom: -2.5,
-              "& .MuiTab-root": {
-                py: 2.5,
-              },
-            }}
-          >
-            <TabList aria-label="lab API tabs example" onChange={handleChange}>
-              <Tab label="Overview" value="1" />
-              <Tab label="Work" value="2" />
-              <Tab label="Education" value="3" />
-            </TabList>
-          </Div>
-        </TabContext>
+        <Stack>
+          <Link to="/edit-profile">
+            <Button variant="outlined" color="primary">
+              Edit Profile
+            </Button>
+          </Link>
+        </Stack>
       }
       headerSx={{
         borderBottom: 1,
@@ -86,7 +79,7 @@ const About = () => {
           }}
         >
           <StyledListItemIcon>
-            <ApartmentIcon fontSize={"inherit"} />
+            <PersonOutlineIcon fontSize={"inherit"} />
           </StyledListItemIcon>
           <ListItemText
             primary={
@@ -96,12 +89,12 @@ const About = () => {
                 color="text.secondary"
                 mb={0.5}
               >
-                Works at
+                Name
               </Typography>
             }
             secondary={
               <Typography variant="body1" color="text.primary">
-                G-axon Tech Pvt. Ltd.
+                John Doe
               </Typography>
             }
           />
@@ -112,7 +105,7 @@ const About = () => {
           }}
         >
           <StyledListItemIcon>
-            <CakeOutlinedIcon fontSize={"inherit"} />
+            <EmailOutlinedIcon fontSize={"inherit"} />
           </StyledListItemIcon>
           <ListItemText
             primary={
@@ -122,12 +115,12 @@ const About = () => {
                 color="text.secondary"
                 mb={0.5}
               >
-                Birthday
+                E-mail
               </Typography>
             }
             secondary={
               <Typography variant="body1" color="text.primary">
-                Oct 25, 1984
+                john@tileflexai.com
               </Typography>
             }
           />
@@ -138,7 +131,7 @@ const About = () => {
           }}
         >
           <StyledListItemIcon>
-            <SchoolOutlinedIcon fontSize={"inherit"} />
+            <LocalPhoneOutlinedIcon fontSize={"inherit"} />
           </StyledListItemIcon>
           <ListItemText
             primary={
@@ -148,12 +141,12 @@ const About = () => {
                 color="text.secondary"
                 mb={0.5}
               >
-                Went to
+                Phone
               </Typography>
             }
             secondary={
               <Typography variant="body1" color="text.primary">
-                Oxford University
+                9876543210
               </Typography>
             }
           />
@@ -164,7 +157,7 @@ const About = () => {
           }}
         >
           <StyledListItemIcon>
-            <CottageOutlinedIcon fontSize={"inherit"} />
+            <BadgeOutlinedIcon fontSize={"inherit"} />
           </StyledListItemIcon>
           <ListItemText
             primary={
@@ -174,23 +167,23 @@ const About = () => {
                 color="text.secondary"
                 mb={0.5}
               >
-                Lives in London
+                Business Name
               </Typography>
             }
             secondary={
               <Typography variant="body1" color="text.primary">
-                From Switzerland
+                El Mediterraneo
               </Typography>
             }
           />
         </ListItem>
         <ListItem
           sx={{
-            width: { xs: "100%", xl: "66.67%" },
+            width: { xs: "100%", sm: "50%", xl: "33.33%" },
           }}
         >
           <StyledListItemIcon>
-            <GroupsOutlinedIcon fontSize={"inherit"} />
+            <BusinessOutlinedIcon fontSize={"inherit"} />
           </StyledListItemIcon>
           <ListItemText
             primary={
@@ -200,67 +193,12 @@ const About = () => {
                 color="text.secondary"
                 mb={0.5}
               >
-                4 Family Members
+                Business Type
               </Typography>
             }
             secondary={
-              <Typography component={"div"} variant={"body1"}>
-                <Stack direction={"row"} flexWrap={"wrap"} sx={{}}>
-                  <AvatarGroup
-                    max={5}
-                    sx={{
-                      ".MuiAvatar-root": {
-                        height: 32,
-                        width: 32,
-                        fontSize: 13,
-                        background: (theme) => theme.palette.grey[600],
-                      },
-                    }}
-                  >
-                    <Avatar
-                      alt="Remy Sharp"
-                      src={getAssetPath(
-                        `${ASSET_AVATARS}/avatar6.jpg`,
-                        "32x32"
-                      )}
-                    />
-                    <Avatar
-                      alt="Remy Sharp"
-                      src={getAssetPath(
-                        `${ASSET_AVATARS}/avatar5.jpg`,
-                        "32x32"
-                      )}
-                    />
-                    <Avatar
-                      alt="Remy Sharp"
-                      src={getAssetPath(
-                        `${ASSET_AVATARS}/avatar3.jpg`,
-                        "32x32"
-                      )}
-                    />
-                    <Avatar
-                      alt="Remy Sharp"
-                      src={getAssetPath(
-                        `${ASSET_AVATARS}/avatar4.jpg`,
-                        "32x32"
-                      )}
-                    />
-                    <Avatar
-                      alt="Remy Sharp"
-                      src={getAssetPath(
-                        `${ASSET_AVATARS}/avatar7.jpg`,
-                        "32x32"
-                      )}
-                    />
-                    <Avatar
-                      alt="Remy Sharp"
-                      src={getAssetPath(
-                        `${ASSET_AVATARS}/avatar8.jpg`,
-                        "32x32"
-                      )}
-                    />
-                  </AvatarGroup>
-                </Stack>
+              <Typography variant="body1" color="text.primary">
+                Restaurant
               </Typography>
             }
           />

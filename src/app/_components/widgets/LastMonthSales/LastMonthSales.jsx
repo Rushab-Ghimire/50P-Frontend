@@ -3,6 +3,7 @@ import { JumboCard } from "@jumbo/components";
 import { Div } from "@jumbo/shared";
 import { Timeline } from "@mui/icons-material";
 import PropTypes from "prop-types";
+import { Colors } from "@app/_themes/TileFlex";
 
 function LastMonthSales({ subheader }) {
   return (
@@ -10,11 +11,11 @@ function LastMonthSales({ subheader }) {
       title="756+"
       subheader={subheader}
       action={<Timeline />}
-      bgcolor={["#c1b2e6", "#7352c7"]}
+      bgcolor={[Colors.light_blue, Colors.dark_blue_1]}
       textColor="common.white"
       reverse={true}
       sx={{
-        borderTop: "4px solid #7352C7",
+        borderTop: `4px solid ${Colors.light_blue}`,
         ".MuiCardHeader-title": {
           color: "inherit",
           fontSize: "1.25rem",

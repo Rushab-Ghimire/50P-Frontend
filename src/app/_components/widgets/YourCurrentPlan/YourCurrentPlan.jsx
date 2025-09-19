@@ -21,25 +21,22 @@ const YourCurrentPlan = ({ title }) => {
           <Grid item xs={7}>
             <Typography component={"div"} variant={"body1"} mb={1}>
               <Typography component={"span"} variant={"h1"}>
-                $19
+                $6
               </Typography>
-              /month
+              /month/user
             </Typography>
             <Typography variant={"h6"} color={"text.secondary"} mb={2}>
               Team Plan (4/5 Members)
             </Typography>
             <List>
               <ListItem disablePadding sx={{ mb: "5px" }}>
-                <ArrowForwardIosIcon sx={{ fontSize: 14, mr: 1 }} /> 2k daily
-                calls
+                <ArrowForwardIosIcon sx={{ fontSize: 14, mr: 1 }} /> Coupon Managament
               </ListItem>
               <ListItem disablePadding sx={{ mb: "5px" }}>
-                <ArrowForwardIosIcon sx={{ fontSize: 14, mr: 1 }} /> 5k monthly
-                SMS
+                <ArrowForwardIosIcon sx={{ fontSize: 14, mr: 1 }} /> CRM Modules
               </ListItem>
               <ListItem disablePadding sx={{ mb: "5px" }}>
-                <ArrowForwardIosIcon sx={{ fontSize: 14, mr: 1 }} /> 500
-                connects
+                <ArrowForwardIosIcon sx={{ fontSize: 14, mr: 1 }} /> AI Training module
               </ListItem>
             </List>
           </Grid>

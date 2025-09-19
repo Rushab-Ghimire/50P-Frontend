@@ -1,307 +1,286 @@
 import Login1 from "@app/pages/auth/login1";
-import { Page } from "@app/_components/_core";
-import withAuth from "@app/_hoc/withAuth";
-import { SoloLayout } from "@app/_layouts/SoloLayout";
-import { StretchedLayout } from "@app/_layouts/StretchedLayout";
-import NotFoundErrorPage from "@app/pages/extra-pages/404";
 import { createBrowserRouter } from "react-router-dom";
-import MiscPage from "@app/pages/dashboards/misc";
-import CryptoPage from "@app/pages/dashboards/crypto";
-import ListingPage from "@app/pages/dashboards/listing";
-import CrmPage from "@app/pages/dashboards/crm";
-import IntranetPage from "@app/pages/dashboards/intranet";
-import EcommercePage from "@app/pages/dashboards/ecommerce";
-import NewsPage from "@app/pages/dashboards/news";
-import { WidgetsPage } from "@app/pages/widgets";
-import MetricsPage from "@app/pages/metrics";
-import CkEditorPage from "@app/pages/extensions/editors/ck";
-import WysiwygEditorPage from "@app/pages/extensions/editors/wysiwyg";
-import DnDPage from "@app/pages/extensions/dnd";
-import DropzonePage from "@app/pages/extensions/dropzone";
-import SweetAlertsPage from "@app/pages/extensions/sweet-alert";
-import BasicCalendarPage from "@app/pages/modules/calendars/basic";
-import CultureCalendarPage from "@app/pages/modules/calendars/culture";
-import PopupCalendarPage from "@app/pages/modules/calendars/popup";
-import RenderingCalendarPage from "@app/pages/modules/calendars/rendering";
-import SelectableCalendarPage from "@app/pages/modules/calendars/selectable";
-import TimeslotCalendarPage from "@app/pages/modules/calendars/timeslot";
-import LineChartPage from "@app/pages/modules/charts/line";
-import BarChartPage from "@app/pages/modules/charts/bar";
-import AreaChartPage from "@app/pages/modules/charts/area";
-import ComposedChartPage from "@app/pages/modules/charts/composed";
-import PieChartPage from "@app/pages/modules/charts/pie";
-import ScatterChartPage from "@app/pages/modules/charts/scatter";
-import RadialChartPage from "@app/pages/modules/charts/radial";
-import RadarChartPage from "@app/pages/modules/charts/radar";
-import TreeMapChartPage from "@app/pages/modules/charts/treemap";
-import SimpleMapPage from "@app/pages/modules/maps/simple";
-import StyledMapPage from "@app/pages/modules/maps/styled";
-import GeoLocationMapPage from "@app/pages/modules/maps/geo-location";
-import DirectionsMapPage from "@app/pages/modules/maps/directions";
-import OverlayMapPage from "@app/pages/modules/maps/overlay";
-import KmLayerMapPage from "@app/pages/modules/maps/kml";
-import PopupInfoMapPage from "@app/pages/modules/maps/popup-info";
-import StreetViewPanoramaPage from "@app/pages/modules/maps/street-view";
-import DrawingViewMapPage from "@app/pages/modules/maps/drawing";
-import MarkerClustererPage from "@app/pages/modules/maps/clustering";
-import AboutUsPage from "@app/pages/extra-pages/about-us";
-import ContactUsPage from "@app/pages/extra-pages/contact-us";
-import CallOutsPage from "@app/pages/extra-pages/call-outs";
-import PricingPlanPage from "@app/pages/extra-pages/pricing-plan";
-import ProjectsListPage from "@app/pages/list-views/projects";
-import UsersListPage from "@app/pages/list-views/users";
-import ProjectsGridPage from "@app/pages/grid-views/projects";
-import UsersGridPage from "@app/pages/grid-views/users";
-import Login2 from "@app/pages/auth/login2";
-import Signup1 from "@app/pages/auth/signup1";
-import Signup2 from "@app/pages/auth/signup2";
-import ForgotPassword from "@app/pages/auth/forgot-password";
-import ResetPassword from "@app/pages/auth/reset-password";
-import InternalServerErrorPage from "@app/pages/extra-pages/500";
-import LockScreenPage from "@app/pages/extra-pages/lock-screen";
-import ChatAppPage from "@app/pages/apps/chat";
-import ContactAppPage from "@app/pages/apps/contact";
-import MailAppPage from "@app/pages/apps/mail";
-import { MailDetail } from "@app/_components/apps/mails";
-import UserProfile from "@app/pages/user/profile";
-import SocialWallApp from "@app/pages/user/social-wall";
+import SamplePage from "@app/pages";
+import { StretchedLayout } from "@app/_layouts/StretchedLayout";
+import { SoloLayout } from "@app/_layouts/SoloLayout";
+import { NewLayout } from "@app/_layouts/NewLayout";
+import { Page } from "@app/_components/_core/Page";
+import withAuth from "@app/_hoc/withAuth";
+import { NotFound } from "@app/_components/_core/NotFound";
+import FlexHome from "@app/pages/FlexHome/FlexHome";
+import ContactList from "@app/pages/contacts/List";
+import calendar from "@app/pages/calendar/calendar";
+import AiChat from "@app/pages/AiChat/AiChat";
+import SignUp from "@app/pages/SignUp/SignUp";
+import profile from "@app/pages/profile/profile";
+import login from "@app/pages/login/login";
+import ForgotPassword from "@app/pages/ForgotPassword/ForgotPassword";
+import ResetPassword from "@app/pages/ResetPassword/ResetPassword";
+import ConfirmEmail from "@app/pages/onboarding/ConfirmEmail";
+import pricing from "@app/pages/pricing/pricing";
+import ProcessFlowDesign from "@app/pages/ProcessFlow/ProcessFlowDesign";
+import ProcessFlow from "@app/pages/ProcessFlow/ProcessFlow";
 
-const routes = [
+import ContextCardDesign from "@app/pages/ContextCard/ContextCardDesign";
+
+import BusinessList from "@app/pages/Business/List";
+import BusinessForm from "@app/pages/Business/Form";
+import ProcessFlowForm from "@app/pages/ProcessFlow/Form";
+
+import ContactForm from "@app/pages/contacts/Form";
+
+import Process from "@app/pages/process/Process";
+import ProcessForm from "@app/pages/process/Form";
+import { TileFlexLayout } from "@app/_layouts/TileFlexLayout/TileFlexLayout";
+import SingupSuccess from "@app/pages/onboarding/SingupSuccess";
+import EmailVerificationFailed from "@app/pages/onboarding/EmailVerificationFailed";
+import OrganizationDetails from "@app/pages/onboarding/OrganizationDetails";
+import EditCompanyProfile from "@app/pages/profile/EditCompanyProfile";
+import Tax from "@app/pages/tax";
+import TaxFiling from "@app/pages/tax/TaxFiling";
+import Assistant from "@app/modules/assistant/Assistant";
+
+import { ROUTES_SALON } from "@app/modules/salon/routes.jsx";
+import ProgressMobileStepper from "@app/modules/NewBusiness/components/NewBusinessStepper";
+import Feedback from "@app/pages/feedback";
+import AdminBooking from "@app/modules/booking/admin";
+import BridgeComponent from "@app/pages/bridge";
+import ChatBot from "@app/modules/salon/ChatBot";
+import VoiceAI from "@app/modules/salon/VoiceAI";
+import { ErrorPage } from "@app/pages/ErrorPage";
+import Invite from "@app/pages/invite/invite";
+import InviteUser from "@app/pages/invite/InviteUser";
+import EditProfile from "@app/pages/profile/EditProfile";
+import PhoneLogin from "@app/pages/login/PhoneLogin";
+import PhoneBooking from "@app/modules/salon/modals/PhoneBooking";
+import MedicalReport from "@app/modules/ehr/MedicalReport/Index";
+import { ROUTES_VOGENT } from "@app/modules/agents/routes.jsx";
+import { ROUTES_ASKDAYSI } from "@app/modules/AskDaysi/routes";
+import Invoice from "@app/pages/invoice";
+
+const ROUTES_COMMON = [
   {
     path: "/",
-    element: <StretchedLayout />,
+    element: <SoloLayout />,
     children: [
       {
-        path: "/dashboards/misc",
-        element: <Page Component={MiscPage} hoc={withAuth} />,
+        path: "/bridge",
+        element: <Page Component={BridgeComponent} hoc={withAuth} />,
       },
       {
-        path: "/dashboards/crypto",
-        element: <Page Component={CryptoPage} hoc={withAuth} />,
+        path: "/signup-success/:mode?",
+        element: <Page Component={SingupSuccess} />,
       },
       {
-        path: "/dashboards/listing",
-        element: <Page Component={ListingPage} hoc={withAuth} />,
+        path: "/error/:mode?",
+        element: <Page Component={ErrorPage} />,
       },
       {
-        path: "/dashboards/crm",
-        element: <Page Component={CrmPage} hoc={withAuth} />,
+        path: "/confirm-email",
+        element: <Page Component={ConfirmEmail} />,
       },
       {
-        path: "/dashboards/intranet",
-        element: <Page Component={IntranetPage} hoc={withAuth} />,
+        path: "/reset-password",
+        element: <Page Component={ResetPassword} />,
       },
       {
-        path: "/dashboards/ecommerce",
-        element: <Page Component={EcommercePage} hoc={withAuth} />,
-      },
-      {
-        path: "/dashboards/news",
-        element: <Page Component={NewsPage} hoc={withAuth} />,
-      },
-      {
-        path: "/widgets",
-        element: <Page Component={WidgetsPage} hoc={withAuth} />,
-      },
-      {
-        path: "/metrics",
-        element: <Page Component={MetricsPage} hoc={withAuth} />,
-      },
-      {
-        path: "/apps/chat",
-        element: <Page Component={ChatAppPage} hoc={withAuth} />,
-      },
-      {
-        path: "/apps/chat/:chatBy/:id",
-        element: <Page Component={ChatAppPage} hoc={withAuth} />,
-      },
-      {
-        path: "/apps/contact",
-        element: <Page Component={ContactAppPage} hoc={withAuth} />,
-      },
-      {
-        path: "/apps/contact/:category",
-        element: <Page Component={ContactAppPage} hoc={withAuth} />,
-      },
-      {
-        path: "/apps/contact/label/:labelID",
-        element: <Page Component={ContactAppPage} hoc={withAuth} />,
-      },
-      {
-        path: "/apps/mail/:category",
-        element: <Page Component={MailAppPage} hoc={withAuth} />,
-      },
-      {
-        path: "/apps/mail/message/:mailID",
-        element: <Page Component={MailAppPage} hoc={withAuth} />,
-      },
-      {
-        path: "/apps/mail/label/:labelID",
-        element: <Page Component={MailAppPage} hoc={withAuth} />,
-      },
-      {
-        path: "/extensions/editors/ck",
-        element: <Page Component={CkEditorPage} hoc={withAuth} />,
-      },
-      {
-        path: "/extensions/editors/wysiwyg",
-        element: <Page Component={WysiwygEditorPage} hoc={withAuth} />,
-      },
-      {
-        path: "/extensions/dnd",
-        element: <Page Component={DnDPage} hoc={withAuth} />,
-      },
-      {
-        path: "/extensions/dropzone",
-        element: <Page Component={DropzonePage} hoc={withAuth} />,
-      },
-      {
-        path: "/extensions/sweet-alert",
-        element: <Page Component={SweetAlertsPage} hoc={withAuth} />,
-      },
-      {
-        path: "/modules/calendars/basic",
-        element: <Page Component={BasicCalendarPage} hoc={withAuth} />,
-      },
-      {
-        path: "/modules/calendars/culture",
-        element: <Page Component={CultureCalendarPage} hoc={withAuth} />,
-      },
-      {
-        path: "/modules/calendars/popup",
-        element: <Page Component={PopupCalendarPage} hoc={withAuth} />,
-      },
-      {
-        path: "/modules/calendars/rendering",
-        element: <Page Component={RenderingCalendarPage} hoc={withAuth} />,
-      },
-      {
-        path: "/modules/calendars/selectable",
-        element: <Page Component={SelectableCalendarPage} hoc={withAuth} />,
-      },
-      {
-        path: "/modules/calendars/timeslot",
-        element: <Page Component={TimeslotCalendarPage} hoc={withAuth} />,
-      },
-      {
-        path: "/modules/charts/line",
-        element: <Page Component={LineChartPage} hoc={withAuth} />,
-      },
-      {
-        path: "/modules/charts/bar",
-        element: <Page Component={BarChartPage} hoc={withAuth} />,
-      },
-      {
-        path: "/modules/charts/area",
-        element: <Page Component={AreaChartPage} hoc={withAuth} />,
-      },
-      {
-        path: "/modules/charts/composed",
-        element: <Page Component={ComposedChartPage} hoc={withAuth} />,
-      },
-      {
-        path: "/modules/charts/pie",
-        element: <Page Component={PieChartPage} hoc={withAuth} />,
-      },
-      {
-        path: "/modules/charts/scatter",
-        element: <Page Component={ScatterChartPage} hoc={withAuth} />,
-      },
-      {
-        path: "/modules/charts/radial",
-        element: <Page Component={RadialChartPage} hoc={withAuth} />,
-      },
-      {
-        path: "/modules/charts/radar",
-        element: <Page Component={RadarChartPage} hoc={withAuth} />,
-      },
-      {
-        path: "/modules/charts/treemap",
-        element: <Page Component={TreeMapChartPage} hoc={withAuth} />,
-      },
-      {
-        path: "/modules/maps/simple",
-        element: <Page Component={SimpleMapPage} hoc={withAuth} />,
-      },
-      {
-        path: "/modules/maps/styled",
-        element: <Page Component={StyledMapPage} hoc={withAuth} />,
-      },
-      {
-        path: "/modules/maps/geo-location",
-        element: <Page Component={GeoLocationMapPage} hoc={withAuth} />,
-      },
-      {
-        path: "/modules/maps/directions",
-        element: <Page Component={DirectionsMapPage} hoc={withAuth} />,
-      },
-      {
-        path: "/modules/maps/overlay",
-        element: <Page Component={OverlayMapPage} hoc={withAuth} />,
-      },
-      {
-        path: "/modules/maps/kml",
-        element: <Page Component={KmLayerMapPage} hoc={withAuth} />,
-      },
-      {
-        path: "/modules/maps/popup-info",
-        element: <Page Component={PopupInfoMapPage} hoc={withAuth} />,
-      },
-      {
-        path: "/modules/maps/street-view",
-        element: <Page Component={StreetViewPanoramaPage} hoc={withAuth} />,
-      },
-      {
-        path: "/modules/maps/drawing",
-        element: <Page Component={DrawingViewMapPage} hoc={withAuth} />,
-      },
-      {
-        path: "/modules/maps/clustering",
-        element: <Page Component={MarkerClustererPage} hoc={withAuth} />,
-      },
-      {
-        path: "/extra-pages/about-us",
-        element: <Page Component={AboutUsPage} hoc={withAuth} />,
-      },
-      {
-        path: "/extra-pages/contact-us",
-        element: <Page Component={ContactUsPage} hoc={withAuth} />,
-      },
-      {
-        path: "/extra-pages/call-outs",
-        element: <Page Component={CallOutsPage} hoc={withAuth} />,
-      },
-      {
-        path: "/extra-pages/pricing-plan",
-        element: <Page Component={PricingPlanPage} hoc={withAuth} />,
-      },
-      {
-        path: "/user/profile",
-        element: <Page Component={UserProfile} hoc={withAuth} />,
-      },
-      {
-        path: "/user/social-wall",
-        element: <Page Component={SocialWallApp} hoc={withAuth} />,
-      },
-      {
-        path: "/list-views/projects",
-        element: <Page Component={ProjectsListPage} hoc={withAuth} />,
-      },
-      {
-        path: "/list-views/users",
-        element: <Page Component={UsersListPage} hoc={withAuth} />,
-      },
-      {
-        path: "/grid-views/projects",
-        element: <Page Component={ProjectsGridPage} hoc={withAuth} />,
-      },
-      {
-        path: "/grid-views/users",
-        element: <Page Component={UsersGridPage} hoc={withAuth} />,
+        path: "/invoice",
+        element: <Page Component={Invoice} />,
       },
     ],
   },
+  {
+    path: "*",
+    element: <NotFound />,
+  },
+];
 
+var routes = [
+  {
+    path: "/",
+    element: <SoloLayout />,
+    children: [
+      {
+        path: "/",
+        element: <Page Component={FlexHome} hoc={withAuth} />,
+      },
+      {
+        path: "/signup",
+        element: <Page Component={SignUp} hoc={withAuth} />,
+      },
+      {
+        path: "/login",
+        element: <Page Component={login} hoc={withAuth} />,
+      },
+      {
+        path: "/confirm-email",
+        element: <Page Component={ConfirmEmail} />,
+      },
+      {
+        path: "/forgot-password",
+        element: <Page Component={ForgotPassword} />,
+      },
+      {
+        path: "/signup-success/:mode?",
+        element: <Page Component={SingupSuccess} />,
+      },
+      // {
+      //   path: "/email-verification-failed",
+      //   element: <Page Component={EmailVerificationFailed} />,
+      // },
+      {
+        path: "/organization-details",
+        element: <Page Component={OrganizationDetails} />,
+      },
+      // {
+      //   path: "/auth/login-1",
+      //   element: <Page Component={Login1} hoc={withAuth} />,
+      // },
+      {
+        path: "/feedback",
+        element: <Page Component={Feedback} />,
+      },
+      {
+        path: "/booking",
+        element: <Page Component={AdminBooking} />,
+      },
+      {
+        path: "/chat/:org_id",
+        element: <Page Component={ChatBot} />,
+      },
+      {
+        path: "/voice/:org_id",
+        element: <Page Component={VoiceAI} />,
+      },
+      {
+        path: "/error/:mode?",
+        element: <Page Component={ErrorPage} />,
+      },
+      {
+        path: "/invite",
+        element: <Page Component={Invite} />,
+      },
+      {
+        path: "/invite-user",
+        element: <Page Component={InviteUser} />,
+      },
+      {
+        path: "/phone-login",
+        element: <Page Component={PhoneLogin} />,
+      },
+      {
+        path: "/test",
+        element: <Page Component={PhoneBooking} />,
+      },
+    ],
+  },
+  {
+    path: "/",
+    element: <TileFlexLayout />,
+    children: [
+      {
+        path: "/my-analytics",
+        element: <Page Component={SamplePage} hoc={withAuth} />,
+      },
+      {
+        path: "/contacts",
+        element: <Page Component={ContactList} hoc={withAuth} />,
+      },
+      {
+        path: "/calendar",
+        element: <Page Component={calendar} hoc={withAuth} />,
+      },
+      {
+        path: "/profile",
+        element: <Page Component={profile} hoc={withAuth} />,
+      },
+      {
+        path: "/edit-company-profile",
+        element: <Page Component={EditCompanyProfile} hoc={withAuth} />,
+      },
+      {
+        path: "/chat-ai",
+        element: <Page Component={AiChat} hoc={withAuth} />,
+      },
+      {
+        path: "/chat-ai/:chatBy/:id",
+        element: <Page Component={AiChat} hoc={withAuth} />,
+      },
+      {
+        path: "/pricing",
+        element: <Page Component={pricing} hoc={withAuth} />,
+      },
+      {
+        path: "/process",
+        element: <Page Component={Process} hoc={withAuth} />,
+      },
+      {
+        path: "/process/new",
+        element: <Page Component={ProcessForm} hoc={withAuth} />,
+      },
+      {
+        path: "/process/:id",
+        element: <Page Component={ProcessForm} hoc={withAuth} />,
+      },
+      {
+        path: "/processflow-design/:id",
+        element: <Page Component={ProcessFlowDesign} hoc={withAuth} />,
+      },
+      {
+        path: "/process-flow",
+        element: <Page Component={ProcessFlow} hoc={withAuth} />,
+      },
+      {
+        path: "/process-flow/new",
+        element: <Page Component={ProcessFlowForm} hoc={withAuth} />,
+      },
+      {
+        path: "/process-flow/:id",
+        element: <Page Component={ProcessFlowForm} hoc={withAuth} />,
+      },
+      {
+        path: "/context-card/:id",
+        element: <Page Component={ContextCardDesign} hoc={withAuth} />,
+      },
+      {
+        path: "/business",
+        element: <Page Component={BusinessList} hoc={withAuth} />,
+      },
+      {
+        path: "/business/new",
+        element: <Page Component={BusinessForm} hoc={withAuth} />,
+      },
+      {
+        path: "/business/:id",
+        element: <Page Component={BusinessForm} hoc={withAuth} />,
+      },
+
+      {
+        path: "/contact/new",
+        element: <Page Component={ContactForm} hoc={withAuth} />,
+      },
+      {
+        path: "/contact/:id",
+        element: <Page Component={ContactForm} hoc={withAuth} />,
+      },
+      {
+        path: "/tax",
+        element: <Page Component={Tax} hoc={withAuth} />,
+      },
+      {
+        path: "/tax-filing",
+        element: <Page Component={TaxFiling} />,
+      },
+      {
+        path: "/assistant/:type?/:param?",
+        element: <Page Component={Assistant} hoc={withAuth} />,
+      },
+      {
+        path: "/new-business",
+        element: <Page Component={ProgressMobileStepper} hoc={withAuth} />,
+      },
+    ],
+  },
   {
     path: "/auth",
     element: <SoloLayout />,
@@ -310,50 +289,21 @@ const routes = [
         path: "login-1",
         element: <Login1 />,
       },
-      {
-        path: "login-2",
-        element: <Login2 />,
-      },
-      {
-        path: "signup-1",
-        element: <Signup1 />,
-      },
-      {
-        path: "signup-2",
-        element: <Signup2 />,
-      },
-      {
-        path: "forgot-password",
-        element: <ForgotPassword />,
-      },
-      {
-        path: "reset-password",
-        element: <ResetPassword />,
-      },
     ],
-  },
-  {
-    path: "/extra-pages",
-    element: <SoloLayout />,
-    children: [
-      {
-        path: "404",
-        element: <NotFoundErrorPage />,
-      },
-      {
-        path: "500",
-        element: <InternalServerErrorPage />,
-      },
-      {
-        path: "lock-screen",
-        element: <LockScreenPage />,
-      },
-    ],
-  },
-  {
-    path: "*",
-    element: <NotFoundErrorPage />,
   },
 ];
+
+if (
+  document.location.href.includes("localhost:5173") ||
+  document.location.href.includes("health") ||
+  document.location.href.includes("staging.daysiai.com")
+) {
+  routes = ROUTES_ASKDAYSI;
+  routes = routes.concat(ROUTES_COMMON);
+} else {
+  routes = routes.concat(ROUTES_SALON);
+  routes = routes.concat(ROUTES_VOGENT);
+  routes = routes.concat(ROUTES_COMMON);
+}
 
 export const router = createBrowserRouter(routes);

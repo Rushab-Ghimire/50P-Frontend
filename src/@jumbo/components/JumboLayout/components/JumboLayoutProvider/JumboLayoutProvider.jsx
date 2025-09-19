@@ -1,20 +1,20 @@
-import PropTypes from "prop-types";
-import { LayoutOptions } from "../../prop-types";
-
-import { useJumboTheme } from "@jumbo/components/JumboTheme/hooks";
-
 import { LAYOUT_ACTIONS, SIDEBAR_VARIANTS } from "@jumbo/utilities/constants";
-import { useMediaQuery } from "@mui/system";
 import React from "react";
 import { JumboLayoutContext, defaultLayoutOptions } from "./JumboLayoutContext";
 import { jumboLayoutReducer } from "./reducer";
+import { useMediaQuery } from "@mui/system";
+import { useJumboTheme } from "@jumbo/components/JumboTheme/hooks";
+import PropTypes from "prop-types";
+import { LayoutOptions } from "../../prop-types";
 
-function JumboLayoutProvider({ children, layoutConfig, debugOptions }) {
+let prevLayoutOptions = null;
+
+function JumboLayoutProvider({ children, layoutConfig }) {
   const [layoutOptions, setLayoutOptions] = React.useReducer(
     jumboLayoutReducer,
     layoutConfig ?? defaultLayoutOptions
   );
-  const [prevLayoutOptions, setPrevLayoutOptions] = React.useState(null);
+
   //handle mobile screen sizes
   const { theme } = useJumboTheme();
   const isBelowLg = useMediaQuery(
@@ -23,8 +23,7 @@ function JumboLayoutProvider({ children, layoutConfig, debugOptions }) {
   React.useEffect(() => {
     if (!layoutOptions.sidebar?.hide) {
       if (isBelowLg) {
-        if (prevLayoutOptions === null)
-          setPrevLayoutOptions(layoutOptions.sidebar);
+        prevLayoutOptions = layoutOptions.sidebar;
         setLayoutOptions({
           type: LAYOUT_ACTIONS.SET_SIDEBAR_OPTIONS,
           payload: {
@@ -38,11 +37,10 @@ function JumboLayoutProvider({ children, layoutConfig, debugOptions }) {
             type: LAYOUT_ACTIONS.SET_SIDEBAR_OPTIONS,
             payload: prevLayoutOptions,
           });
-          setPrevLayoutOptions(null);
         }
       }
     }
-  }, [isBelowLg, prevLayoutOptions, layoutOptions.sidebar?.hide]);
+  }, [isBelowLg, layoutOptions.sidebar?.hide]);
 
   React.useEffect(() => {
     if (layoutConfig)
@@ -87,20 +85,6 @@ function JumboLayoutProvider({ children, layoutConfig, debugOptions }) {
     });
   }, []);
 
-  const setWrapperOptions = React.useCallback((options) => {
-    setLayoutOptions({
-      type: LAYOUT_ACTIONS.SET_WRAPPER_OPTIONS,
-      payload: options,
-    });
-  }, []);
-
-  const setMainOptions = React.useCallback((options) => {
-    setLayoutOptions({
-      type: LAYOUT_ACTIONS.SET_MAIN_OPTIONS,
-      payload: options,
-    });
-  }, []);
-
   const setOptions = React.useCallback((options) => {
     setLayoutOptions({
       type: LAYOUT_ACTIONS.SET_OPTIONS,
@@ -116,28 +100,20 @@ function JumboLayoutProvider({ children, layoutConfig, debugOptions }) {
       footerOptions: layoutOptions.footer,
       contentOptions: layoutOptions.content,
       rootOptions: layoutOptions.root,
-      wrapperOptions: layoutOptions.wrapper,
-      mainOptions: layoutOptions.main,
-      debugOptions,
       setHeaderOptions,
       setSidebarOptions,
       setFooterOptions,
       setContentOptions,
       setRootOptions,
-      setWrapperOptions,
-      setMainOptions,
       setOptions,
     }),
     [
       layoutOptions,
-      debugOptions,
       setHeaderOptions,
       setFooterOptions,
       setSidebarOptions,
       setContentOptions,
       setRootOptions,
-      setWrapperOptions,
-      setMainOptions,
       setOptions,
     ]
   );

@@ -9,7 +9,7 @@ import Divider from "@mui/material/Divider";
 const ContactItem = ({ contactItem }) => {
   const navigate = useNavigate();
   const handleContactClick = () => {
-    navigate(`/apps/chat/contact/${contactItem?.id}`);
+    navigate(`/chat-ai/contact/${contactItem?.id}`);
   };
   return (
     <List disablePadding>

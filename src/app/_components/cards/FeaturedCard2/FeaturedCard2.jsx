@@ -8,21 +8,21 @@ function FeaturedCard2({ title, subheader, avatar, bgcolor }) {
   return (
     <Card
       sx={{
-        height: 116,
+        height: 64,
         "& .MuiCardHeader-root": {
           height: "100%",
         },
         "& .MuiCardHeader-avatar": {
-          marginRight: "50px",
-          marginLeft: "10px",
+          marginRight: "36px",
+          marginLeft: "0",
 
           "&::before": {
             content: '""',
             position: "absolute",
             top: "-35px",
             left: "-55px",
-            width: 185,
-            height: 185,
+            width: 144,
+            height: 136,
             borderRadius: "50%",
             ...bgColorStyle,
           },

@@ -9,7 +9,7 @@ import { useNavigate } from "react-router-dom";
 const ConversationItem = ({ conversationItem }) => {
   const navigate = useNavigate();
   const handleConversationClick = () => {
-    navigate(`/apps/chat/conversation/${conversationItem?.id}`);
+    navigate(`/chat-ai/conversation/${conversationItem?.id}`);
   };
   return (
     <List disablePadding>

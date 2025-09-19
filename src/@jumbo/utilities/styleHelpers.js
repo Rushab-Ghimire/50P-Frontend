@@ -50,14 +50,3 @@ export const getBgImageStyle = (imgSrc) => {
     backgroundSize: "cover",
   };
 };
-
-export const colorForBgColor = (hexColor) => {
-  hexColor = hexColor.replace("#", "");
-  const r = parseInt(hexColor.substr(0, 2), 16);
-  const g = parseInt(hexColor.substr(2, 2), 16);
-  const b = parseInt(hexColor.substr(4, 2), 16);
-
-  return r < 100 || g < 100 || b < 100 ? "white" : "#333333";
-  // const yiq = ((r*299)+(g*587)+(b*114))/1000;
-  // return (yiq >= 128) ? 'black' : 'white';
-};

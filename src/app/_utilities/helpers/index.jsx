@@ -1,5 +1,44 @@
 import moment from "moment";
-import { USE_IMAGE_PLACEHOLDERS } from "../constants/paths";
+import {
+  USE_IMAGE_PLACEHOLDERS,
+  API_URL,
+  GQL_API_URL,
+  PUB_SUB_API_URL,
+  BOT_ROUTER_URL,
+} from "../constants/paths";
+import { useCallback, useMemo, useState } from "react";
+import { GLOBAL } from "../globals";
+import { getCookie, getCookieValue } from "@jumbo/utilities/cookies";
+
+export function getUniqueObjectsArray(array, key) {
+  const seen = new Set();
+  return array.filter((item) => {
+    const keyValue = item[key];
+    if (seen.has(keyValue)) {
+      return false;
+    }
+    seen.add(keyValue);
+    return true;
+  });
+}
+
+export function getRoles(org) {
+  if (org === undefined || org == null) {
+    return [];
+  }
+  return org[0]?.roles.map((itm) => itm.identifier);
+}
+
+export function useArrayState(initial = []) {
+  const array = useMemo(() => initial, []);
+  const [refresh, setRefresh] = useState(0);
+  const cb = useCallback((f) => {
+    f(array);
+    setRefresh((it) => ++it);
+  }, []);
+
+  return [array, cb];
+}
 
 export const getCustomDateTime = (
   value = 0,
@@ -11,6 +50,11 @@ export const getCustomDateTime = (
   } else {
     return moment().add(value, unit).format(format);
   }
+};
+
+export const getFormattedDate = (date, format = "HH:mm a | MMMM DD, YYYY") => {
+  if (date === undefined) return "N/A";
+  return moment(date).format(format);
 };
 
 export const getDateElements = (date) => {
@@ -39,34 +83,6 @@ export const getAssetPath = (url, size) => {
   return url;
 };
 
-export const timeSince = (days) => {
-  let calcDate = new Date(Date.now() - days * 24 * 3600 * 1000);
-  let seconds = Math.floor((new Date().getTime() - calcDate.getTime()) / 1000);
-
-  let interval = seconds / 31536000;
-
-  if (interval > 1) {
-    return Math.floor(interval) + "y ago";
-  }
-  interval = seconds / 2592000;
-  if (interval > 1) {
-    return Math.floor(interval) + "m ago";
-  }
-  interval = seconds / 86400;
-  if (interval > 1) {
-    return Math.floor(interval) + "d ago";
-  }
-  interval = seconds / 3600;
-  if (interval > 1) {
-    return Math.floor(interval) + "h ago";
-  }
-  interval = seconds / 60;
-  if (interval > 1) {
-    return Math.floor(interval) + "m ago";
-  }
-  return Math.floor(seconds) + "s ago";
-};
-
 export const isValidEmail = (emailAddress) => {
   const pattern = new RegExp(
     /^(("[\w-\s]+")|([\w-]+(?:\.[\w-]+)*)|("[\w-\s]+")([\w-]+(?:\.[\w-]+)*))(@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$)|(@\[?((25[0-5]\.|2[0-4][0-9]\.|1[0-9]{2}\.|[0-9]{1,2}\.))((25[0-5]|2[0-4][0-9]|1[0-9]{2}|[0-9]{1,2})\.){2}(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[0-9]{1,2})\]?$)/i
@@ -74,10 +90,47 @@ export const isValidEmail = (emailAddress) => {
   return pattern.test(emailAddress);
 };
 
-export const getNewID = (function () {
-  let id = 0;
-  return function () {
-    id++;
-    return id;
-  };
-})();
+export const getAPIUrl = (route) => {
+  return `${API_URL + route + "/"}`;
+};
+
+export const getGQLAPIUrl = (route) => {
+  return `${GQL_API_URL + route}`;
+};
+
+export const getPubSubAPIUrl = (route) => {
+  return `${PUB_SUB_API_URL}`;
+};
+
+export const getBOTUrl = (route) => {
+  return `${BOT_ROUTER_URL + route + "/"}`;
+};
+
+export const getDefaultLanguage = () => {
+  var nLng = "";
+  try {
+    console.log("default-lang", getCookie("default-lang"));
+    if (
+      getCookie("default-lang") !== undefined &&
+      getCookie("default-lang") !== null &&
+      getCookie("default-lang") !== ""
+    ) {
+      nLng = getCookie("default-lang").split("-");
+      nLng = nLng[0].toLowerCase();
+
+      console.log("nLng", nLng);
+      return getCookie("default-lang");
+    }
+
+    nLng = navigator.language.split("-");
+    nLng = nLng[0].toLowerCase();
+
+    console.log("nLng", nLng);
+
+    if (nLng == "hi") {
+      return "in";
+    } else return nLng.trim();
+  } catch (e) {
+    return "en";
+  }
+};

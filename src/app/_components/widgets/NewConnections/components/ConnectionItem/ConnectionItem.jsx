@@ -33,7 +33,7 @@ const ConnectionItem = ({ item, handleFollowToggle }) => {
           p: (theme) => theme.spacing(0.5, 1.5),
         }}
       >
-        {item.follow ? "Unfollow" : "Follow"}
+        {item.follow ? "View Bookings" : "Send Coupons"}
       </Button>
     </ListItem>
   );

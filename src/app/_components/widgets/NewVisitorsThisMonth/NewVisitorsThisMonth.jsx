@@ -3,6 +3,7 @@ import { JumboCard } from "@jumbo/components";
 import { Div } from "@jumbo/shared";
 import TrendingUpIcon from "@mui/icons-material/TrendingUp";
 import PropTypes from "prop-types";
+import { Colors } from "@app/_themes/TileFlex";
 
 const NewVisitorsThisMonth = ({ subheader }) => {
   return (
@@ -11,10 +12,10 @@ const NewVisitorsThisMonth = ({ subheader }) => {
       subheader={subheader}
       action={<TrendingUpIcon fontSize={"small"} />}
       textColor="common.white"
-      bgcolor={["#f9cc8a", "#f39711"]}
+      bgcolor={[Colors.light_blue, Colors.dark_blue_1]}
       reverse
       sx={{
-        borderTop: "4px solid #F39711",
+        borderTop: `4px solid ${Colors.light_blue}`,
         ".MuiCardHeader-title": {
           color: "inherit",
           fontSize: "1.25rem",

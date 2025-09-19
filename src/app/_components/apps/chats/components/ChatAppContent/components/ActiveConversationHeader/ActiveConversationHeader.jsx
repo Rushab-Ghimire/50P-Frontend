@@ -17,7 +17,7 @@ const ActiveConversationHeader = ({ activeConversation }) => {
   const { theme } = useJumboTheme();
   const md = useMediaQuery(theme.breakpoints.down("md"));
   const handleCloseConversation = () => {
-    navigate(`/apps/chat`);
+    navigate(`/chat-ai`);
   };
   if (!activeConversation) return null;
   return (

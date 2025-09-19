@@ -1,9 +1,8 @@
-import PropTypes from "prop-types";
-
 import { createTheme } from "@mui/material/styles";
 import React from "react";
 import { JumboThemeHeaderContext } from "./JumboThemeHeaderContext";
 import { themeConfig } from "../../JumboTheme";
+import PropTypes from "prop-types";
 
 const JumboThemeHeader = ({ children, init }) => {
   //todo: later we can set a default theme for header here instead of {}

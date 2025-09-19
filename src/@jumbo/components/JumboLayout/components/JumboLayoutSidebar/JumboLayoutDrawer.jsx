@@ -4,20 +4,28 @@ import {
   useJumboSidebarTheme,
   useJumboTheme,
 } from "@jumbo/components/JumboTheme/hooks";
-import { SIDEBAR_VARIANTS } from "@jumbo/utilities/constants";
-import { Box, Drawer } from "@mui/material";
+import {
+  SIDEBAR_STYLES,
+  SIDEBAR_VARIANTS,
+  SIDEBAR_VIEWS,
+} from "@jumbo/utilities/constants";
+import { Box, Drawer, IconButton, Zoom } from "@mui/material";
 import ThemeProvider from "@mui/material/styles/ThemeProvider";
 import {
   useDrawerVariant,
   useJumboLayout,
   useSidebarDrawerHandlers,
   useSidebarDrawerSx,
+  useSidebarState,
 } from "../../hooks";
+import { SidebarHeaderDiv } from "@app/_components/layout/Sidebar/components";
+import MenuOpenIcon from "@mui/icons-material/MenuOpen";
+import { Logo } from "@app/_components/_core/Logo";
 
 function JumboLayoutDrawer({ children }) {
   const { sidebarTheme } = useJumboSidebarTheme();
   const { theme } = useJumboTheme();
-  const { sidebarOptions } = useJumboLayout();
+  const { sidebarOptions, setSidebarOptions } = useJumboLayout();
 
   const { handleClose, handleMouseEnter, handleMouseLeave } =
     useSidebarDrawerHandlers();
@@ -25,7 +33,8 @@ function JumboLayoutDrawer({ children }) {
   const drawerSx = useSidebarDrawerSx();
   const drawerVariant = useDrawerVariant();
   // const headerSpaceSx = useHeaderSpaceSx();
-
+  const { isMiniAndClosed } = useSidebarState();
+  const miniAndClosed = isMiniAndClosed();
   if (sidebarOptions?.hide) {
     return null;
   }
@@ -36,9 +45,9 @@ function JumboLayoutDrawer({ children }) {
       direction: theme.direction,
     };
   }, [theme.direction, sidebarTheme]);
-  // function handleMenuToggle() {
-  //   setSidebarOptions({ open: false });
-  // }
+  function handleMenuToggle() {
+    setSidebarOptions({ open: false });
+  }
   return (
     <ThemeProvider theme={sidebarWithDirectionByMainTheme}>
       <Drawer
@@ -67,6 +76,25 @@ function JumboLayoutDrawer({ children }) {
           onMouseEnter={handleMouseEnter}
           onMouseLeave={handleMouseLeave}
         >
+          {sidebarOptions?.style === SIDEBAR_STYLES.CLIPPED_UNDER_HEADER && (
+            <SidebarHeaderDiv>
+              <Logo mini={miniAndClosed} mode={theme.type} />
+              {sidebarOptions?.view !== SIDEBAR_VIEWS.MINI && (
+                <Zoom in={sidebarOptions?.open}>
+                  <IconButton
+                    edge="start"
+                    color="inherit"
+                    aria-label="open drawer"
+                    sx={{ ml: 0, mr: -1.5 }}
+                    onClick={handleMenuToggle}
+                  >
+                    <MenuOpenIcon />
+                  </IconButton>
+                </Zoom>
+              )}
+            </SidebarHeaderDiv>
+            // <Toolbar sx={{ flexShrink: 0, ...headerSpaceSx }} />
+          )}
           {children}
         </Box>
         {sidebarTheme?.sidebar?.overlay?.bgcolor && (

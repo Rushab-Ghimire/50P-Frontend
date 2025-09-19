@@ -4,9 +4,16 @@ import "./i18n";
 import "@app/_styles/style.css";
 import "@assets/fonts/noir-pro/styles.css";
 import App from "@app/App";
+import { GoogleOAuthProvider } from '@react-oauth/google';
+import {
+  GOOGLEOAUTH_CLIENTID,
+} from "@app/_utilities/constants/paths";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>
+  <GoogleOAuthProvider clientId={GOOGLEOAUTH_CLIENTID}>
+  <App />
+  </GoogleOAuthProvider>
+  // <React.StrictMode>
+  //   <App />
+  // </React.StrictMode>
 );

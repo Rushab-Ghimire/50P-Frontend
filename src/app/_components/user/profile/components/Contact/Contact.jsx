@@ -30,7 +30,7 @@ const Contacts = () => {
             }
             secondary={
               <Link variant="body1" href="#" underline="none">
-                kiley.brown@example.com
+                manish@tileflexai.com
               </Link>
             }
           />
@@ -50,7 +50,7 @@ const Contacts = () => {
             }
             secondary={
               <Link variant="body1" href="#" underline="none">
-                example.com
+                tileflexai.com
               </Link>
             }
           />
@@ -70,7 +70,7 @@ const Contacts = () => {
             }
             secondary={
               <Typography variant="body1" color="text.primary">
-                +1-987 (454) 987
+                +977-987641023
               </Typography>
             }
           />

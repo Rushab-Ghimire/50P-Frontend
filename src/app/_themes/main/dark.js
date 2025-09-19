@@ -35,8 +35,10 @@ export const mainTheme = {
       md: 768,
       lg: 992,
       xl: 1200,
+      xxl: 1600,
     },
   },
+
   palette: {
     primary: {
       main: "#7352C7",
@@ -265,6 +267,9 @@ export const mainTheme = {
     },
   },
   jumboComponents: {
+    JumboSearch: {
+      background: "#3C475F",
+    },
     // JumboNavbar: {
     //   nav: {
     //     action: {

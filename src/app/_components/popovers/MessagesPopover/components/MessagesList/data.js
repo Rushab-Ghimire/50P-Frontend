@@ -5,7 +5,7 @@ export const messagesData = [
   {
     user: {
       id: 1,
-      name: "Domnic Harris",
+      name: "Nimesh Shrestha",
       profile_pic: getAssetPath(`${ASSET_AVATARS}/domnic-harris.jpg`, "40x40"),
     },
     message: "I think its a good idea, lets do it then.",
@@ -14,25 +14,25 @@ export const messagesData = [
   {
     user: {
       id: 2,
-      name: "Joe Root",
-      profile_pic: getAssetPath(`${ASSET_AVATARS}/avatar4.jpg`, "40x40"),
+      name: "Kamal Kafle",
+      profile_pic: getAssetPath(`${ASSET_AVATARS}/garry-sobars.jpg`, "40x40"),
     },
-    message: "Hey, lets have a cricket match this sunday, what you say?",
+    message: "Hey, lets have a meeting this tuesday, what you say?",
     date: getCustomDateTime(-15, "minutes", "MMMM DD, YYYY, h:mm:ss a"),
   },
   {
     user: {
       id: 3,
-      name: "Dennis lilly",
-      profile_pic: getAssetPath(`${ASSET_AVATARS}/avatar7.jpg`, "40x40"),
+      name: "Rabindra ",
+      profile_pic: getAssetPath(`${ASSET_AVATARS}/kadir-m.jpg`, "40x40"),
     },
-    message: "George has invited you for the dinner, will you go?",
+    message: "Let connect for a quick discussion this thursday.",
     date: getCustomDateTime(-45, "minutes", "MMMM DD, YYYY, h:mm:ss a"),
   },
   {
     user: {
       id: 4,
-      name: "Sara Taylor",
+      name: "Neelam",
       profile_pic: getAssetPath(`${ASSET_AVATARS}/avatar5.jpg`, "40x40"),
     },
     message:

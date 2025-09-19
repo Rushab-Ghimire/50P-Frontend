@@ -5,7 +5,8 @@ import { JumboCard } from "@jumbo/components";
 import { useJumboTheme } from "@jumbo/components/JumboTheme/hooks";
 import { FormControlLabel, Switch, Typography } from "@mui/material";
 import { Div } from "@jumbo/shared";
-import { JumboForm, JumboSelect } from "@jumbo/vendors/react-hook-form";
+import { JumboForm } from "@jumbo/vendors/react-hook-form";
+import { JumboSelect } from "@jumbo/vendors/react-hook-form/components/JumboSelect";
 
 const languages = [
   {

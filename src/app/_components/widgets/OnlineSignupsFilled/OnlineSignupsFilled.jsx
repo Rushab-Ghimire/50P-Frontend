@@ -4,6 +4,7 @@ import { Div } from "@jumbo/shared";
 import { TrendingUp } from "@mui/icons-material";
 import { Typography } from "@mui/material";
 import PropTypes from "prop-types";
+import { Colors } from "@app/_themes/TileFlex";
 
 function OnlineSignupsFilled({ subheader }) {
   return (
@@ -19,10 +20,10 @@ function OnlineSignupsFilled({ subheader }) {
         </Typography>
       }
       textColor="common.white"
-      bgcolor={["#a3ead3", "#3bd2a2"]}
+      bgcolor={[Colors.light_blue, Colors.dark_blue_1]}
       reverse
       sx={{
-        borderTop: "4px solid #3BD2A2",
+        borderTop: `4px solid ${Colors.light_blue}`,
         ".MuiCardHeader-title": {
           color: "inherit",
           fontSize: "1.25rem",

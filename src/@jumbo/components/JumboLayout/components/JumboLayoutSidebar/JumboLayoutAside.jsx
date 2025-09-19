@@ -4,18 +4,21 @@ import {
   useJumboSidebarTheme,
   useJumboTheme,
 } from "@jumbo/components/JumboTheme/hooks";
-
-import { Box } from "@mui/material";
+import { SIDEBAR_STYLES, SIDEBAR_VIEWS } from "@jumbo/utilities/constants";
+import { Box, IconButton, Zoom } from "@mui/material";
 import ThemeProvider from "@mui/material/styles/ThemeProvider";
-import { useJumboLayout } from "../../hooks";
-
+import { useJumboLayout, useSidebarState } from "../../hooks";
+import { SidebarHeaderDiv } from "@app/_components/layout/Sidebar/components";
+import MenuOpenIcon from "@mui/icons-material/MenuOpen";
 import { Div } from "@jumbo/shared";
-
+import { Logo } from "@app/_components/_core/Logo";
 function JumboLayoutAside({ children }) {
   const { sidebarTheme } = useJumboSidebarTheme();
   const { theme } = useJumboTheme();
-  const { sidebarOptions } = useJumboLayout();
+  const { sidebarOptions, setSidebarOptions } = useJumboLayout();
 
+  const { isMiniAndClosed } = useSidebarState();
+  const miniAndClosed = isMiniAndClosed();
   if (sidebarOptions?.hide) {
     return null;
   }
@@ -26,17 +29,9 @@ function JumboLayoutAside({ children }) {
       direction: theme.direction,
     };
   }, [theme.direction, sidebarTheme]);
-
-  if (sidebarOptions.plain) {
-    return (
-      <ThemeProvider theme={sidebarWithDirectionByMainTheme}>
-        <Box component={"aside"} sx={sidebarOptions.sx}>
-          {children}
-        </Box>
-      </ThemeProvider>
-    );
+  function handleMenuToggle() {
+    setSidebarOptions({ open: false });
   }
-
   return (
     <ThemeProvider theme={sidebarWithDirectionByMainTheme}>
       <Div>
@@ -52,6 +47,25 @@ function JumboLayoutAside({ children }) {
             zIndex: 1,
           }}
         >
+          {sidebarOptions?.style === SIDEBAR_STYLES.CLIPPED_UNDER_HEADER && (
+            <SidebarHeaderDiv>
+              <Logo mini={miniAndClosed} mode={theme.type} />
+              {sidebarOptions?.view !== SIDEBAR_VIEWS.MINI && (
+                <Zoom in={sidebarOptions?.open}>
+                  <IconButton
+                    edge="start"
+                    color="inherit"
+                    aria-label="open drawer"
+                    sx={{ ml: 0, mr: -1.5 }}
+                    onClick={handleMenuToggle}
+                  >
+                    <MenuOpenIcon />
+                  </IconButton>
+                </Zoom>
+              )}
+            </SidebarHeaderDiv>
+            // <Toolbar sx={{ flexShrink: 0, ...headerSpaceSx }} />
+          )}
           {children}
         </Box>
         {sidebarTheme?.sidebar?.overlay?.bgcolor && (

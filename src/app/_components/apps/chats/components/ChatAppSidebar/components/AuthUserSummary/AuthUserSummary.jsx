@@ -82,16 +82,16 @@ const AuthUserSummary = () => {
                       sx={{ width: 60, height: 60, mr: 2 }}
                       alt={"Cory Smith"}
                       src={getAssetPath(
-                        `${ASSET_AVATARS}/avatar3.jpg`,
+                        `${ASSET_AVATARS}/avatar4.jpg`,
                         "60x60"
                       )}
                     />
                     <Div sx={{ flex: "1 1 auto" }}>
                       <Typography variant={"h5"} mb={0.35}>
-                        Cory Smith
+                        Manish
                       </Typography>
                       <Typography variant={"body1"} color={"text.secondary"}>
-                        Life must be big
+                        Available Online Tagline
                       </Typography>
                     </Div>
                   </Div>
@@ -197,7 +197,7 @@ const AuthUserSummary = () => {
                             color={"text.primary"}
                             mb={0}
                           >
-                            Savannah Nguyen
+                            Manish Tandukar
                           </Typography>
                         }
                       />
@@ -225,7 +225,7 @@ const AuthUserSummary = () => {
                             color={"text.primary"}
                             mb={0}
                           >
-                            savanah.naguyen21
+                            Manish
                           </Typography>
                         }
                       />
@@ -253,7 +253,7 @@ const AuthUserSummary = () => {
                             color={"text.primary"}
                             mb={0}
                           >
-                            savanah.mail@gmail.com
+                            manish@tileflexai.com
                           </Typography>
                         }
                       />
@@ -281,7 +281,7 @@ const AuthUserSummary = () => {
                             color={"text.primary"}
                             mb={0}
                           >
-                            (022) 245 877 7896
+                            9876543210
                           </Typography>
                         }
                       />
@@ -328,13 +328,13 @@ const AuthUserSummary = () => {
           <Avatar
             sx={{ width: 50, height: 50 }}
             alt="Cory Smith"
-            src={getAssetPath(`${ASSET_AVATARS}/avatar3.jpg`, "50x50")}
+            src={getAssetPath(`${ASSET_AVATARS}/avatar4.jpg`, "50x50")}
           />
         </Badge>
         <Div sx={{ flex: "1 1 auto" }}>
-          <Typography variant={"h5"}>Christy Lin</Typography>
+          <Typography variant={"h5"}>Manish</Typography>
           <Typography variant={"body1"} color={"text.secondary"}>
-            Life must be big
+            Lorem Ipsum Dolor
           </Typography>
         </Div>
       </Div>

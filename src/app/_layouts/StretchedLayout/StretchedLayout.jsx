@@ -18,10 +18,10 @@ export function StretchedLayout() {
         footer={<Footer />}
         sidebar={<Sidebar menus={menus} />}
       >
-        {location.pathname === "/" && <Navigate to={"/dashboards/misc"} />}
+        {/* {location.pathname === "/" && <Navigate to={"/dashboards/misc"} />} */}
         <Outlet />
-        <Customizer />
-        <CustomizerButton />
+        {/* <Customizer /> */}
+        {/* <CustomizerButton /> */}
       </JumboLayout>
     </JumboLayoutProvider>
   );

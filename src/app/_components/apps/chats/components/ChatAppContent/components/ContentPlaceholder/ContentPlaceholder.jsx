@@ -21,7 +21,7 @@ const ContentPlaceholder = () => {
         width={350}
       />
       <Typography variant={"h2"} mt={2} color={"text.primary"}>
-        Welcome to Jumbo chat app
+        Welcome to TileFlexAI Chat
       </Typography>
     </Div>
   );

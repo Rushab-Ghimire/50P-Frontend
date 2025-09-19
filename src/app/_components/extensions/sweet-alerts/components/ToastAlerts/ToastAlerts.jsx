@@ -3,7 +3,6 @@ import useSwalWrapper from "@jumbo/vendors/sweetalert2/hooks";
 import { useTheme } from "@mui/material";
 import Button from "@mui/material/Button";
 import Stack from "@mui/material/Stack";
-import { SweetAlertIcon } from "sweetalert2";
 
 const ToastAlerts = () => {
   const Swal = useSwalWrapper();

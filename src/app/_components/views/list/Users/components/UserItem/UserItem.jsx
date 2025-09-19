@@ -76,7 +76,7 @@ const UserItem = ({ item }) => {
                     width: 56,
                     height: 56,
                   }}
-                  alt={`${item.firstName} 
+                  alt={`${item.firstName}
                                     ${item.lastName}`}
                   src={item.profilePic}
                 />
@@ -121,7 +121,7 @@ const UserItem = ({ item }) => {
                 {item.summary.views}
               </Typography>
               <Typography variant={"body1"} color="text.secondary">
-                Views
+                Appointments
               </Typography>
             </Item>
             <Item>
@@ -129,7 +129,7 @@ const UserItem = ({ item }) => {
                 {item.summary.projects}
               </Typography>
               <Typography variant={"body1"} color="text.secondary">
-                Project
+                Transactions
               </Typography>
             </Item>
             <Item>
@@ -137,7 +137,7 @@ const UserItem = ({ item }) => {
                 {item.summary.followers}
               </Typography>
               <Typography variant={"body1"} color="text.secondary">
-                Followers
+                Cancellations
               </Typography>
             </Item>
           </Stack>
@@ -155,7 +155,7 @@ const UserItem = ({ item }) => {
             size={"small"}
             color={item.isFollowing ? "error" : "primary"}
           >
-            {item.isFollowing ? "Unfollow" : "Follow"}
+            {item.isFollowing ? "Reminder" : "Followup"}
           </Button>
         </Item>
         <Item sx={{ ml: { xs: "auto", sm: 0 } }}>

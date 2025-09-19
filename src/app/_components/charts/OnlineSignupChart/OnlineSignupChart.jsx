@@ -3,6 +3,8 @@ import { Line, LineChart, ResponsiveContainer, Tooltip, XAxis } from "recharts";
 import { onlineSignups } from "./data";
 import PropTypes from "prop-types";
 
+import { Colors } from "@app/_themes/TileFlex";
+
 const OnlineSignupChart = ({ color, shadowColor }) => {
   return (
     <ResponsiveContainer height={80}>
@@ -13,7 +15,7 @@ const OnlineSignupChart = ({ color, shadowColor }) => {
               dx="0"
               dy="5"
               stdDeviation="8"
-              floodColor={shadowColor ? shadowColor : "#6610f2"}
+              floodColor={shadowColor ? shadowColor : Colors.light_blue}
             />
           </filter>
         </defs>

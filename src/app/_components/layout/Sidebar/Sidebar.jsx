@@ -7,8 +7,9 @@ import { JumboNavbar } from "@jumbo/components";
 import { useJumboLayout } from "@jumbo/components/JumboLayout/hooks";
 import { SIDEBAR_VIEWS } from "@jumbo/utilities/constants";
 import PropTypes from "prop-types";
+import { Box } from "@mui/material";
 
-function Sidebar({ menus }) {
+function Sidebar({ menus, cl }) {
   const { sidebarTheme } = useJumboSidebarTheme();
   const { sidebarOptions } = useJumboLayout();
   return (
@@ -31,12 +32,14 @@ function Sidebar({ menus }) {
           }
         >
           {/* <SidebarSkeleton /> */}
-          <JumboNavbar
-            items={menus}
-            theme={sidebarTheme}
-            mini={sidebarOptions.view === SIDEBAR_VIEWS.MINI}
-            open={sidebarOptions.open}
-          />
+          <Box className={cl}>
+            <JumboNavbar
+              items={menus}
+              theme={sidebarTheme}
+              mini={sidebarOptions.view === SIDEBAR_VIEWS.MINI}
+              open={sidebarOptions.open}
+            />
+          </Box>
         </Suspense>
       </JumboScrollbar>
     </React.Fragment>

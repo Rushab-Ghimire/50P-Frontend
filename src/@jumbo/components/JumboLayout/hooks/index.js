@@ -147,7 +147,6 @@ function useAppBarSx() {
   const { sidebarOptions, headerOptions } = useJumboLayout();
   const headerMarginLeft = useHeaderMargin();
   const appBarSx = React.useMemo(() => {
-    //TODO: code cleaning - need to learn how to destructure two SxProps to combine into one
     if (headerOptions?.sx) {
       return {
         ...headerOptions.sx,

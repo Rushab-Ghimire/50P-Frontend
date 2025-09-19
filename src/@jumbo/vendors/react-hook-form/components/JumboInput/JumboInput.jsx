@@ -9,7 +9,6 @@ const JumboInput = ({
   formControl = true,
   onChange,
   defaultValue,
-  fullWidth,
   className,
   ...restProps
 }) => {
@@ -44,11 +43,7 @@ const JumboInput = ({
   );
 
   if (formControl) {
-    return (
-      <FormControl className={className} fullWidth={fullWidth}>
-        {inputField}
-      </FormControl>
-    );
+    return <FormControl className={className}>{inputField}</FormControl>;
   }
 
   return inputField;

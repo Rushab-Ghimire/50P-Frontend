@@ -14,7 +14,7 @@ const EmailCampaignChart = ({ color, shadowColor }) => {
               dx="0"
               dy="3"
               stdDeviation="8"
-              floodColor={shadowColor ? shadowColor : "#666666"}
+              floodColor={shadowColor ? shadowColor : "#6dcff6"}
             />
           </filter>
         </defs>

@@ -1,11 +1,12 @@
 import List from "@mui/material/List";
 import MessageItem from "./MessageItem";
 import { messagesData } from "./data";
+import React, { forwardRef, useImperativeHandle } from "react";
 
-const MessagesList = () => {
+const MessagesList = ({ data }) => {
   return (
     <List disablePadding>
-      {messagesData?.map((item, index) => {
+      {data?.map((item, index) => {
         return <MessageItem item={item} key={index} />;
       })}
     </List>

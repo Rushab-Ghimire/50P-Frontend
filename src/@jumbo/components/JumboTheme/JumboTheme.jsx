@@ -22,6 +22,9 @@ export const themeConfig = PropTypes.shape({
     }),
   }),
   jumboComponents: PropTypes.shape({
+    JumboSearch: PropTypes.shape({
+      background: PropTypes.string,
+    }),
     JumboNavbar: PropTypes.shape({
       nav: PropTypes.shape({
         action: PropTypes.shape({

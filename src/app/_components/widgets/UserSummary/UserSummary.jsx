@@ -2,18 +2,20 @@ import { FeaturedCard2 } from "@app/_components/cards/FeaturedCard2/FeaturedCard
 import { Avatar } from "@mui/material";
 import PropTypes from "prop-types";
 
-function UserSummary({ title, subheader }) {
+function UserSummary({ title, subheader, image }) {
   return (
     <FeaturedCard2
       avatar={
         <Avatar
           sx={{
-            width: 60,
-            height: 60,
+            width: 44,
+            height: 44,
             boxShadow: 2,
             position: "relative",
+            backgroundColor: "#fff",
+            padding: "10px",
           }}
-          src={`/assets/images/avatar/avatar7.jpg`}
+          src={image}
           alt={""}
         />
       }
@@ -28,5 +30,5 @@ export { UserSummary };
 
 UserSummary.propTypes = {
   title: PropTypes.node.isRequired,
-  subheader: PropTypes.node.isRequired,
+  subheader: PropTypes.node,
 };

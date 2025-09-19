@@ -35,6 +35,7 @@ export const mainTheme = {
       md: 768,
       lg: 992,
       xl: 1200,
+      xxl: 1600,
     },
   },
 
@@ -141,6 +142,9 @@ export const mainTheme = {
     },
   },
   jumboComponents: {
+    JumboSearch: {
+      background: "#F5F5F5",
+    },
     JumboNavbar: {
       nav: {
         action: {

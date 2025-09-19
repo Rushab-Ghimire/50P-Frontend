@@ -34,11 +34,9 @@ const defaultLayoutConfig = {
   root: {},
   content: {
     sx: {
-      py: 4,
+      py: 1,
     },
   },
-  wrapper: {},
-  main: {},
 };
 
 export const CONTAINER_MAX_WIDTH = 1320;

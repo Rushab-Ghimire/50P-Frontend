@@ -49,6 +49,4 @@ export const LAYOUT_ACTIONS = {
   SET_OPTIONS: "set-options",
   SET_ROOT_OPTIONS: "set-root-options",
   SET_CONTENT_OPTIONS: "set-content-options",
-  SET_WRAPPER_OPTIONS: "set-wrapper-options",
-  SET_MAIN_OPTIONS: "set-main-options",
 };

@@ -21,7 +21,7 @@ export const users = [
     profilePic: getAssetPath(`${ASSET_AVATARS}/avatar4.jpg`, "56x56"),
     firstName: "Eliza",
     lastName: "Shelton",
-    title: "Marketing Head",
+    title: "Customer",
     handle: "@jannie",
     summary: {
       projects: 243,
@@ -36,7 +36,7 @@ export const users = [
     profilePic: getAssetPath(`${ASSET_AVATARS}/avatar5.jpg`, "56x56"),
     firstName: "Irene",
     lastName: "Owen",
-    title: "Fashion Artist",
+    title: "Hair Dresser",
     handle: "@jannie",
     summary: {
       projects: 243,
@@ -51,7 +51,7 @@ export const users = [
     profilePic: getAssetPath(`${ASSET_AVATARS}/avatar6.jpg`, "56x56"),
     firstName: "Rebeca",
     lastName: "Nunez",
-    title: "Graphic Designer",
+    title: "Customer",
     handle: "@rebeca.graphic",
     summary: {
       projects: 243,
@@ -66,7 +66,7 @@ export const users = [
     profilePic: getAssetPath(`${ASSET_AVATARS}/avatar7.jpg`, "56x56"),
     firstName: "Stacy",
     lastName: "Burns",
-    title: "Creative Head",
+    title: "Customer",
     handle: "@stacy.burns",
     summary: {
       projects: 243,
@@ -81,7 +81,7 @@ export const users = [
     profilePic: getAssetPath(`${ASSET_AVATARS}/avatar8.jpg`, "56x56"),
     firstName: "Daniel",
     lastName: "Murray",
-    title: "Web Master",
+    title: "Customer",
     handle: "@web.daniel",
     summary: {
       projects: 243,
@@ -96,7 +96,7 @@ export const users = [
     profilePic: getAssetPath(`${ASSET_AVATARS}/avatar9.jpg`, "56x56"),
     firstName: "Rocky",
     lastName: "Hamilton",
-    title: "Marketing Head",
+    title: "Customer",
     handle: "@rocky.h",
     summary: {
       projects: 243,
@@ -111,7 +111,7 @@ export const users = [
     profilePic: getAssetPath(`${ASSET_AVATARS}/avatar10.jpg`, "56x56"),
     firstName: "Jack",
     lastName: "Brown",
-    title: "Fashion Artist",
+    title: "Hair Stylist",
     handle: "@jack.brown",
     summary: {
       projects: 243,
@@ -126,7 +126,7 @@ export const users = [
     profilePic: getAssetPath(`${ASSET_AVATARS}/avatar11.jpg`, "56x56"),
     firstName: "Mariya",
     lastName: "Gray",
-    title: "Human Resource",
+    title: "Customer",
     handle: "@mariya.human",
     summary: {
       projects: 243,

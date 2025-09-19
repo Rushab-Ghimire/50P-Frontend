@@ -13,7 +13,7 @@ const RevenueChart = ({ color, shadowColor }) => {
               dx="0"
               dy="5"
               stdDeviation="8"
-              floodColor={shadowColor ? shadowColor : "#28a745"}
+              floodColor={shadowColor ? shadowColor : "#6dcff6"}
             />
           </filter>
         </defs>

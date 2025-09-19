@@ -3,6 +3,7 @@ import { JumboCard } from "@jumbo/components";
 import { Div } from "@jumbo/shared";
 import { Chip } from "@mui/material";
 import PropTypes from "prop-types";
+import { Colors } from "@app/_themes/TileFlex";
 
 function TotalRevenueThisYear({ subheader }) {
   return (
@@ -12,15 +13,15 @@ function TotalRevenueThisYear({ subheader }) {
       action={
         <Chip
           size={"small"}
-          label={"2022"}
+          label={"2024"}
           sx={{ bgcolor: "#F5F7FA", color: "grey.800" }}
         />
       }
       textColor="common.white"
-      bgcolor={["#f4a3ac", "#e73145"]}
+      bgcolor={[Colors.light_blue, Colors.dark_blue_1]}
       reverse
       sx={{
-        borderTop: "4px solid #E73145",
+        borderTop: `4px solid ${Colors.light_blue}`,
         ".MuiCardHeader-title": {
           color: "inherit",
           fontSize: "1.25rem",

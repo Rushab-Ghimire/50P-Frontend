@@ -1,5 +1,6 @@
 import { Div } from "@jumbo/shared";
 import { Area, AreaChart, ResponsiveContainer, Tooltip, XAxis } from "recharts";
+import { Colors } from "@app/_themes/TileFlex";
 
 function ChartOrders({ data }) {
   return (
@@ -54,8 +55,8 @@ function ChartOrders({ data }) {
           stackId="1"
           strokeWidth={2}
           fillOpacity={0.7}
-          stroke={"#159F65"}
-          fill="url(#color4)"
+          stroke={Colors.light_blue}
+          fill="url(#colorUv)"
         />
       </AreaChart>
     </ResponsiveContainer>

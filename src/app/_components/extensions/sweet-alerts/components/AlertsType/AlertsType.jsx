@@ -2,7 +2,6 @@ import { JumboCard } from "@jumbo/components/JumboCard";
 import useSwalWrapper from "@jumbo/vendors/sweetalert2/hooks";
 import Button from "@mui/material/Button";
 import Stack from "@mui/material/Stack";
-import { SweetAlertIcon } from "sweetalert2";
 
 const AlertsType = () => {
   const Swal = useSwalWrapper();

@@ -1,6 +1,6 @@
 import { Stack, Chip } from "@mui/material";
 import { getArrayElementFromKey } from "@jumbo/utilities/systemHelpers";
-import { colorForBgColor } from "@jumbo/utilities/styleHelpers";
+import { getColorObject } from "@jumbo/utilities/styleHelpers";
 import { labels } from "@app/_components/apps/contacts/fake-datas";
 
 const LabelChips = ({
@@ -22,7 +22,7 @@ const LabelChips = ({
           ? chip.name
           : getArrayElementFromKey(chip, mapKeys?.label);
         const bgColor = chip?.color ? chip.color : defaultColor;
-        const color = colorForBgColor(bgColor);
+        const color = getColorObject(bgColor);
         return (
           <Chip
             key={index}

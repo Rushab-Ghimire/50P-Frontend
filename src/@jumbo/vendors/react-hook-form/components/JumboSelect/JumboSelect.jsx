@@ -76,7 +76,11 @@ const JumboSelect = ({
 
   if (formControl) {
     return (
-      <FormControl variant="outlined" error={!!errors[fieldName]}>
+      <FormControl
+        variant="outlined"
+        error={!!errors[fieldName]}
+        className="JumboDropDownField"
+      >
         {label && <InputLabel>{label}</InputLabel>}
         {inputField}
       </FormControl>

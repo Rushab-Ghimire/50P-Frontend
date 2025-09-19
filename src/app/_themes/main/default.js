@@ -35,14 +35,16 @@ export const mainTheme = {
       md: 768,
       lg: 992,
       xl: 1200,
+      xxl: 1600,
     },
   },
 
   palette: {
     primary: {
-      main: "#7352C7",
-      light: "#A67FFB",
-      dark: "#5E3BB7",
+      main: "#6dcff6",
+      light: "#7BD3EA",
+      dark: "#268ccc",
+      dark_1: "#58cced",
       contrastText: "#FFF",
     },
     secondary: {
@@ -52,8 +54,8 @@ export const mainTheme = {
       contrastText: "#FFF",
     },
     error: {
-      main: "#E73145",
-      light: "#FF6A70",
+      main: "#FF6A70",
+      light: "#E73145",
       dark: "#AD001E",
       contrastText: "#FFF",
     },
@@ -141,6 +143,9 @@ export const mainTheme = {
     },
   },
   jumboComponents: {
+    JumboSearch: {
+      background: "#F5F5F5",
+    },
     JumboNavbar: {
       nav: {
         action: {

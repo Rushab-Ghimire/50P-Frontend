@@ -1,9 +1,8 @@
-import PropTypes from "prop-types";
-
 import { createTheme } from "@mui/material/styles";
 import React from "react";
 import { JumboThemeFooterContext } from "./JumboThemeFooterContext";
 import { themeConfig } from "../../JumboTheme";
+import PropTypes from "prop-types";
 
 const JumboThemeFooter = ({ children, init }) => {
   //todo: we can setup a default theme for footer here instead of {}

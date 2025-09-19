@@ -6,6 +6,8 @@ import { FeaturedCard3 } from "@app/_components/cards";
 import { ASSET_IMAGES } from "@app/_utilities/constants/paths";
 import { Div } from "@jumbo/shared";
 
+import { Colors } from "@app/_themes/TileFlex";
+
 const activeStyle = {
   bgcolor: "#F5F7FA",
   color: "primary.main",
@@ -20,7 +22,7 @@ const UpgradePlan = () => {
   const [isMonthlyPlan, setIsMonthlyPlan] = useState(true);
   return (
     <FeaturedCard3
-      bgcolor={["-135deg", "#E44A77", "#7352C7"]}
+      bgcolor={["-135deg", Colors.dark_blue_1, Colors.light_blue]}
       textColor="common.white"
       avatar={
         <Stack alignItems={"center"}>

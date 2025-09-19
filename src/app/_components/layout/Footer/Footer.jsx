@@ -1,7 +1,14 @@
 import { Div } from "@jumbo/shared";
 import { Button, Typography } from "@mui/material";
+import { useState } from "react";
 
 const Footer = () => {
+  const [currentDate, setCurrentDate] = useState(getDate());
+  function getDate() {
+    const today = new Date();
+    const year = today.getFullYear();
+    return `${year}`;
+  }
   return (
     <Div
       sx={{
@@ -20,22 +27,8 @@ const Footer = () => {
         }}
       >
         <Typography variant={"body1"} color={"text.primary"}>
-          Copyright Company Name © 2024
+          © {currentDate} TileFlexAI | All Rights Reserved
         </Typography>
-        <Div sx={{ display: "flex", alignItems: "center" }}>
-          <Typography
-            variant="h5"
-            sx={{
-              display: { xs: "none", sm: "block" },
-              mb: 0,
-              mr: 2,
-              color: "primary.main",
-            }}
-          >
-            $24 Only
-          </Typography>
-          <Button variant="contained">Buy Now</Button>
-        </Div>
       </Div>
     </Div>
   );

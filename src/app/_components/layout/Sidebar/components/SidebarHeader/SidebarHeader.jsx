@@ -8,7 +8,7 @@ import MenuOpenIcon from "@mui/icons-material/MenuOpen";
 import { IconButton, Zoom } from "@mui/material";
 import React from "react";
 import { SidebarHeaderDiv } from "..";
-import { Logo } from "@app/_components/_core";
+import { Logo } from "@app/_components/_core/Logo";
 
 function SidebarHeader() {
   const { sidebarOptions, setSidebarOptions } = useJumboLayout();

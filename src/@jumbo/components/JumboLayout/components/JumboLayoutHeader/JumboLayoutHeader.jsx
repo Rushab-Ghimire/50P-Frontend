@@ -1,5 +1,5 @@
 import { useJumboHeaderTheme } from "@jumbo/components/JumboTheme/hooks";
-import { AppBar, Box, ThemeProvider, Toolbar } from "@mui/material";
+import { AppBar, ThemeProvider, Toolbar } from "@mui/material";
 import React from "react";
 import { useAppBarSx, useJumboLayout } from "../../hooks";
 
@@ -10,17 +10,7 @@ function JumboLayoutHeader({ children }) {
   //TODO: need to cross check this calculation
   const appBarSx = useAppBarSx();
 
-  if (headerOptions?.hide || !children) return null;
-
-  if (headerOptions?.plain) {
-    return (
-      <ThemeProvider theme={headerTheme}>
-        <Box component={"header"} sx={headerOptions.sx}>
-          {children}
-        </Box>
-      </ThemeProvider>
-    );
-  }
+  if (headerOptions?.hide) return null;
 
   return (
     <ThemeProvider theme={headerTheme}>
