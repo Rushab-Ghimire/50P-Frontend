@@ -64,36 +64,7 @@ const AskDaysiChat = () => {
           }}
         >
           <AskDaysiAppBar />
-          <ADContentWrapper>
-            {chat && (
-              <ChatModule
-                getUserSession={getUserSession}
-                setUserSession={setUserSession}
-              />
-            )}
-            {talk && (
-              <TalkModule
-                getUserSession={getUserSession}
-                setUserSession={setUserSession}
-              />
-            )}
-          </ADContentWrapper>
-          {/* <ADFloatingBtns>
-        <Stack>
-          {chat && (
-            <Box className="icon-wrap">
-              <KeyboardVoiceOutlinedIcon onClick={showTalk} />
-            </Box>
-          )}
-        </Stack>
-        <Stack>
-          {talk && (
-            <Box className="icon-wrap">
-              <KeyboardOutlinedIcon onClick={showChat} />
-            </Box>
-          )}
-        </Stack>
-      </ADFloatingBtns> */}
+          <ADContentWrapper>New Design Here</ADContentWrapper>
           <UnlockProDialog />
 
           {/* <Footer /> */}

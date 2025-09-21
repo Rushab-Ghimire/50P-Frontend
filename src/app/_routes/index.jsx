@@ -295,8 +295,7 @@ var routes = [
 
 if (
   document.location.href.includes("localhost:5173") ||
-  document.location.href.includes("health") ||
-  document.location.href.includes("staging.daysiai.com")
+  document.location.href.includes("50paisa")
 ) {
   routes = ROUTES_ASKDAYSI;
   routes = routes.concat(ROUTES_COMMON);
