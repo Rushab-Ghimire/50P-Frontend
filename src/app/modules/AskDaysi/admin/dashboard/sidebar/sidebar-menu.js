@@ -112,6 +112,12 @@ export const get_ASKDAYSI_MENU = () => {
           icon: "lab",
           roles: ["sa"],
         },
+          {
+          path: "/askdaysi/Transactions",
+          label: "Transactions",
+          icon: "lab",
+          roles: ["sa"],
+        },
         {
           path: "/askdaysi/specializations",
           label: "Specialization",

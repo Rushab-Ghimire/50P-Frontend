@@ -55,6 +55,7 @@ export function WidgetsPage() {
       disableGutters
     >
       <Grid container spacing={3.75}>
+    
           <Grid item xs={10} lg={6}>
           <StudentTableWidget title={t("widgets.title.StudentTableWidget")} />
         </Grid>
