@@ -19,7 +19,7 @@ import {
   MenuItem,
   IconButton,
 } from "@mui/material";
-import SearchOutlinedIcon from "@mui/icons-material/SearchOutlined";
+// import SearchOutlinedIcon from "@mui/icons-material/SearchOutlined";
 import { gqlQuery, gqlMutate, queryClient } from "@app/_utilities/http.js";
 import { GET_TRANSACTION, createTransaction, updateTransaction } from "./TransactionQueries";
 
@@ -38,21 +38,22 @@ export default function TransactionsForm() {
   const [formError, setFormError] = useState({ isError: false, message: "" });
 
   // NEW: Pagination & Search
-  const [searchTerm, setSearchTerm] = useState("");
-  const [first] = useState(10);
-  const [skip, setSkip] = useState(0);
-  const searchRef = useRef();
+  // const [searchTerm, setSearchTerm] = useState("");
+  // const [first] = useState(10);
+  // const [skip, setSkip] = useState(0);
+  // const searchRef = useRef();
 
-  const handleSearchSubmit = (e) => {
-    e.preventDefault();
-    setSearchTerm(searchRef.current.value);
-    setSkip(0);
-  };
+  // const handleSearchSubmit = (e) => {
+  //   e.preventDefault();
+  //   setSearchTerm(searchRef.current.value);
+  //   setSkip(0);
+  // };
+
   // fetch all and pick the item by id (backend returns all_tokens_transactions)
   const { isLoading } = useQuery({
-    queryKey: ["transaction", params.id, {first,skip,searchTerm}],
+    queryKey: ["transaction", params.id],
     queryFn: ({ signal }) =>
-      gqlQuery({ signal, path: "/graphql", inData: { gql: GET_TRANSACTION(params.id,first,skip,searchTerm) } }),
+      gqlQuery({ signal, path: "/graphql", inData: { gql: GET_TRANSACTION(params.id) } }),
     enabled: !!params.id,
     onSuccess: (res) => {
       const rows = res?.allTokensTransactions?.rows || [];
@@ -114,7 +115,7 @@ export default function TransactionsForm() {
           {params.id ? "Edit Transaction" : "update Transaction"}
         </Typography>
         
-            {/* Search field (NEW) */}
+            {/* Search field (NEW) 
         <form onSubmit={handleSearchSubmit}>
           <TextField
             size="small"
@@ -130,7 +131,7 @@ export default function TransactionsForm() {
             }}
             sx={{ mb: 3 }}
           />
-        </form>
+        </form>*/}
 
         {formError.isError && <Alert severity="error" sx={{ mb: 2 }}>{formError.message}</Alert>}
 
