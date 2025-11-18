@@ -42,6 +42,10 @@ import InsurancesList from "../admin/dashboard/pages/Insurances/List";
 import InsurancesForm from "../admin/dashboard/pages/Insurances/Form";
 import TransactionsList from "../admin/dashboard/pages/Transactions/List";
 import TransactionsForm from "../admin/dashboard/pages/Transactions/Form";
+import UserList from "../admin/dashboard/pages/UserModule/List";
+import UserForm from "../admin/dashboard/pages/UserModule/Form";
+import SubscriptionList from "../admin/dashboard/pages/Subscriptionmodule/List";
+import SubscriptionForm from "../admin/dashboard/pages/Subscriptionmodule/Form";
 import JobList from "../admin/dashboard/pages/JobModule/List";
 import JobForm from "../admin/dashboard/pages/JobModule/Form";
 import CourseList from "../admin/dashboard/pages/CourseModule/List";
@@ -159,11 +163,23 @@ const ROUTES_ASKDAYSI = [
       { path: "/askdaysi/insurances/:id", element: <Page Component={InsurancesForm} hoc={withAuth} /> },
 
       // -----------------------
-      // TRANSACTIONS (Fixed + Connected)
+      // TRANSACTIONS
       // -----------------------
       { path: "/askdaysi/transactions", element: <Page Component={TransactionsList} hoc={withAuth} /> },
       { path: "/askdaysi/transactions/new", element: <Page Component={TransactionsForm} hoc={withAuth} /> },
       { path: "/askdaysi/transactions/:id", element: <Page Component={TransactionsForm} hoc={withAuth} /> },
+
+       // UserModule 
+      // -----------------------
+      { path: "/askdaysi/UserModule", element: <Page Component={UserList} hoc={withAuth} /> },
+      { path: "/askdaysi/UserModule/new", element: <Page Component={UserForm} hoc={withAuth} /> },
+      { path: "/askdaysi/UserModule/:id", element: <Page Component={UserForm} hoc={withAuth} /> },
+
+        // SusbcriptionModule
+      // -----------------------
+      { path: "/askdaysi/SubscriptionModule", element: <Page Component={SubscriptionList} hoc={withAuth} /> },
+      { path: "/askdaysi/SubscriptionModule/new", element: <Page Component={SubscriptionForm} hoc={withAuth} /> },
+      { path: "/askdaysi/SubscriptionModule/:id", element: <Page Component={SubscriptionForm} hoc={withAuth} /> },
 
       //JOBS MODULE
        { path: "/askdaysi/JobModule", element: <Page Component={JobList} hoc={withAuth} /> },

@@ -118,6 +118,18 @@ export const get_ASKDAYSI_MENU = () => {
           icon: "lab",
           roles: ["sa"],
         },
+         {
+          path: "/askdaysi/UserModule",
+          label: "UserModule",
+          icon: "edit",
+          roles: ["sa"],
+        },
+         {
+          path: "/askdaysi/SubscriptionModule",
+          label: "SubscriptionModule",
+          icon: "edit",
+          roles: ["sa"],
+        },
         {
           path: "/askdaysi/JobModule",
           label: "JobModule",
