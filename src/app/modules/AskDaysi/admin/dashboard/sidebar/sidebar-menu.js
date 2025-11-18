@@ -131,6 +131,18 @@ export const get_ASKDAYSI_MENU = () => {
           roles: ["sa"],
         },
         {
+          path: "/askdaysi/JobModule",
+          label: "JobModule",
+          icon: "edit",
+          roles: ["sa"],
+        },
+         {
+          path: "/askdaysi/CourseModule",
+          label: "CourseModule",
+          icon: "edit",
+          roles: ["sa"],
+        },
+        {
           path: "/askdaysi/specializations",
           label: "Specialization",
           icon: "lab",
