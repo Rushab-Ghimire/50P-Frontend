@@ -42,6 +42,10 @@ import InsurancesList from "../admin/dashboard/pages/Insurances/List";
 import InsurancesForm from "../admin/dashboard/pages/Insurances/Form";
 import TransactionsList from "../admin/dashboard/pages/Transactions/List";
 import TransactionsForm from "../admin/dashboard/pages/Transactions/Form";
+import JobList from "../admin/dashboard/pages/JobModule/List";
+import JobForm from "../admin/dashboard/pages/JobModule/Form";
+import CourseList from "../admin/dashboard/pages/CourseModule/List";
+import CourseForm from "../admin/dashboard/pages/CourseModule/Form";
 import SpecializationsList from "../admin/dashboard/pages/Specializations/List";
 import SpecializationsForm from "../admin/dashboard/pages/Specializations/Form";
 import ClinicsList from "../admin/dashboard/pages/Clinics/List";
@@ -161,6 +165,15 @@ const ROUTES_ASKDAYSI = [
       { path: "/askdaysi/transactions/new", element: <Page Component={TransactionsForm} hoc={withAuth} /> },
       { path: "/askdaysi/transactions/:id", element: <Page Component={TransactionsForm} hoc={withAuth} /> },
 
+      //JOBS MODULE
+       { path: "/askdaysi/JobModule", element: <Page Component={JobList} hoc={withAuth} /> },
+      { path: "/askdaysi/JobModule/new", element: <Page Component={JobForm} hoc={withAuth} /> },
+      { path: "/askdaysi/JobModule/:id", element: <Page Component={JobForm} hoc={withAuth} /> },
+
+      //COURSE MODULE
+       { path: "/askdaysi/CourseModule", element: <Page Component={CourseList} hoc={withAuth} /> },
+      { path: "/askdaysi/CourseModule/new", element: <Page Component={CourseForm} hoc={withAuth} /> },
+      { path: "/askdaysi/CourseModule/:id", element: <Page Component={CourseForm} hoc={withAuth} /> },
       // -----------------------
       // SPECIALIZATIONS
       // -----------------------
