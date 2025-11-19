@@ -1,5 +1,6 @@
+// JobList.jsx
+import React, { useState, useRef } from "react";
 
-import React, { useState } from "react";
 import {
   Box,
   Button,
@@ -12,36 +13,107 @@ import {
   TableHead,
   TableRow,
   Typography,
+  CircularProgress,
+  Alert,
+  Stack,
   Tooltip,
   TextField,
 } from "@mui/material";
+
 import { Add, Edit, Delete, SearchOutlined } from "@mui/icons-material";
+import { useNavigate } from "react-router-dom";
+import { useQuery, useMutation } from "react-query";
 
-const dummyJobs = [
-  { id: 1, job_title: "Software Engineer", location: "Dharan", employee_type: "Full-Time", salary: "80000", category: "IT" },
-  { id: 2, job_title: "Accountant", location: "Kathmandu", employee_type: "Part-Time", salary: "40000", category: "Finance" },
-  { id: 3, job_title: "HR Manager", location: "Biratnagar", employee_type: "Full-Time", salary: "60000", category: "HR" },
-];
+import { gqlQuery, gqlMutate, queryClient } from "@app/_utilities/http.js";
+import { PER_PAGE } from "@app/_utilities/constants/paths";
+import { AppPagination } from "@app/_components/_core";
 
-export function JobList() {
+export default function JobList() {
+  const navigate = useNavigate();
+
   const [searchTerm, setSearchTerm] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+  const searchRef = useRef();
 
-  const filtered = dummyJobs.filter((j) =>
-    j.job_title.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  // ------------------- FETCH JOBS -------------------
+  const { data, isLoading, isError, error } = useQuery({
+    queryKey: ["jobs", searchTerm, currentPage],
+    queryFn: ({ signal }) => {
+      const gql = `
+        # TODO: Add GraphQL Query to fetch jobs with pagination + search
+        # Example:
+        # query {
+        #   jobs(search: "${searchTerm}", page: ${currentPage}) {
+        #     rows { id job_title salary ... }
+        #     totalRows
+        #   }
+        # }
+      `;
+      return gqlQuery({ signal, path: "/graphql", inData: { gql } });
+    },
+    keepPreviousData: true,
+  });
 
+  // ------------------- DELETE MUTATION -------------------
+  const { mutate: deleteJob, isPending: isDeleting } = useMutation({
+    mutationFn: gqlMutate,
+    onSuccess: () => queryClient.invalidateQueries(["jobs"]),
+  });
+
+  const handleDelete = (id) => {
+    if (!window.confirm("Delete this job?")) return;
+
+    const gql = `
+      # TODO: Add Delete Job Mutation
+    `;
+
+    deleteJob({ path: "/graphql", inData: { gql } });
+  };
+
+  // ------------------- SEARCH + PAGINATION -------------------
+  const handleSearch = (e) => {
+    e.preventDefault();
+    setSearchTerm(searchRef.current.value || "");
+    setCurrentPage(1);
+  };
+
+  const handlePage = (newPage) => {
+    setCurrentPage(newPage);
+  };
+
+  const rows = data?.rows || [];
+  const totalRows = data?.totalRows || 0;
+
+  // ------------------- UI -------------------
   return (
     <Box sx={{ p: 4 }}>
-      <Typography variant="h5" fontWeight={600} sx={{ mb: 3 }}>Job Listings</Typography>
+      <Stack
+        direction="row"
+        justifyContent="space-between"
+        alignItems="center"
+        sx={{ mb: 3 }}
+      >
+        <Typography variant="h5" fontWeight={600}>
+          Job Listings
+        </Typography>
+        <Button
+          variant="contained"
+          startIcon={<Add />}
+          onClick={() => navigate("/jobs/new")}
+        >
+          Add Job
+        </Button>
+      </Stack>
 
-      <Box component="form" sx={{ mb: 3 }} onSubmit={(e) => e.preventDefault()}>
+      {/* Search */}
+      <Box component="form" onSubmit={handleSearch} sx={{ mb: 3 }}>
         <TextField
           size="small"
+          inputRef={searchRef}
           placeholder="Search jobs..."
-          onChange={(e) => setSearchTerm(e.target.value)}
           InputProps={{
             endAdornment: (
-              <IconButton>
+              <IconButton type="submit">
                 <SearchOutlined />
               </IconButton>
             ),
@@ -49,51 +121,86 @@ export function JobList() {
         />
       </Box>
 
-      <TableContainer component={Paper} sx={{ borderRadius: 2, boxShadow: 3 }}>
-        <Table>
-          <TableHead>
-            <TableRow sx={{ backgroundColor: "#f5f5f5" }}>
-              <TableCell><strong>ID</strong></TableCell>
-              <TableCell><strong>Job Title</strong></TableCell>
-              <TableCell><strong>Location</strong></TableCell>
-              <TableCell><strong>Type</strong></TableCell>
-              <TableCell><strong>Salary</strong></TableCell>
-              <TableCell><strong>Category</strong></TableCell>
-              <TableCell align="center"><strong>Actions</strong></TableCell>
-            </TableRow>
-          </TableHead>
+      {/* Loading */}
+      {isLoading ? (
+        <Box display="flex" justifyContent="center" sx={{ py: 6 }}>
+          <CircularProgress />
+        </Box>
+      ) : isError ? (
+        <Alert severity="error">
+          {error?.info?.message || error?.message || "Failed to load jobs"}
+        </Alert>
+      ) : (
+        <TableContainer component={Paper} sx={{ borderRadius: 2, boxShadow: 3 }}>
+          <Table>
+            <TableHead>
+              <TableRow sx={{ backgroundColor: "#f5f5f5" }}>
+                <TableCell><strong>ID</strong></TableCell>
+                <TableCell><strong>Job Title</strong></TableCell>
+                <TableCell><strong>Location</strong></TableCell>
+                <TableCell><strong>Type</strong></TableCell>
+                <TableCell><strong>Salary</strong></TableCell>
+                <TableCell><strong>Category</strong></TableCell>
+                <TableCell align="center"><strong>Actions</strong></TableCell>
+              </TableRow>
+            </TableHead>
 
-          <TableBody>
-            {filtered.length === 0 ? (
-              <TableRow><TableCell colSpan={7} align="center">No jobs found.</TableCell></TableRow>
-            ) : (
-              filtered.map((job) => (
-                <TableRow key={job.id} hover>
-                  <TableCell>{job.id}</TableCell>
-                  <TableCell>{job.job_title}</TableCell>
-                  <TableCell>{job.location}</TableCell>
-                  <TableCell>{job.employee_type}</TableCell>
-                  <TableCell>{job.salary}</TableCell>
-                  <TableCell>{job.category}</TableCell>
-                  <TableCell align="center">
-                    <Tooltip title="Edit">
-                      <IconButton color="primary"><Edit /></IconButton>
-                    </Tooltip>
-                    <Tooltip title="Delete">
-                      <IconButton color="error"><Delete /></IconButton>
-                    </Tooltip>
+            <TableBody>
+              {rows.length === 0 ? (
+                <TableRow>
+                  <TableCell colSpan={7} align="center">
+                    No jobs found.
                   </TableCell>
                 </TableRow>
-              ))
-            )}
-          </TableBody>
-        </Table>
-      </TableContainer>
+              ) : (
+                rows.map((job) => (
+                  <TableRow key={job.id} hover>
+                    <TableCell>{job.id}</TableCell>
+                    <TableCell>{job.job_title}</TableCell>
+                    <TableCell>{job.location}</TableCell>
+                    <TableCell>{job.employee_type}</TableCell>
+                    <TableCell>{job.salary}</TableCell>
+                    <TableCell>{job.category}</TableCell>
 
-      <Button variant="contained" startIcon={<Add />} sx={{ mt: 3 }}>
-        Add Job
-      </Button>
+                    <TableCell align="center">
+                      <Tooltip title="Edit">
+                        <IconButton
+                          color="primary"
+                          onClick={() =>
+                            navigate(`/jobs/${job.id}`)
+                          }
+                        >
+                          <Edit />
+                        </IconButton>
+                      </Tooltip>
+
+                      <Tooltip title="Delete">
+                        <IconButton
+                          color="error"
+                          onClick={() => handleDelete(job.id)}
+                          disabled={isDeleting}
+                        >
+                          <Delete />
+                        </IconButton>
+                      </Tooltip>
+                    </TableCell>
+                  </TableRow>
+                ))
+              )}
+            </TableBody>
+          </Table>
+        </TableContainer>
+      )}
+
+      {/* Pagination */}
+      {totalRows > 0 && (
+        <AppPagination
+          current_page={currentPage}
+          current_rowsPerPage={PER_PAGE}
+          totalRows={totalRows}
+          onHandleChangePage={handlePage}
+        />
+      )}
     </Box>
   );
 }
-export default JobList;
