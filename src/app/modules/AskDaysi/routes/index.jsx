@@ -42,8 +42,8 @@ import InsurancesList from "../admin/dashboard/pages/Insurances/List";
 import InsurancesForm from "../admin/dashboard/pages/Insurances/Form";
 import TransactionsList from "../admin/dashboard/pages/Transactions/List";
 import TransactionsForm from "../admin/dashboard/pages/Transactions/Form";
-import UserList from "../admin/dashboard/pages/UserModule/List";
-import UserForm from "../admin/dashboard/pages/UserModule/Form";
+import TeacherList from "../admin/dashboard/pages/TeacherModule/List";
+import TeacherForm from "../admin/dashboard/pages/TeacherModule/Form";
 import SubscriptionList from "../admin/dashboard/pages/Subscriptionmodule/List";
 import SubscriptionForm from "../admin/dashboard/pages/Subscriptionmodule/Form";
 import JobList from "../admin/dashboard/pages/JobModule/List";
@@ -169,11 +169,11 @@ const ROUTES_ASKDAYSI = [
       { path: "/askdaysi/transactions/new", element: <Page Component={TransactionsForm} hoc={withAuth} /> },
       { path: "/askdaysi/transactions/:id", element: <Page Component={TransactionsForm} hoc={withAuth} /> },
 
-       // UserModule 
+   // TeacherModule 
       // -----------------------
-      { path: "/askdaysi/UserModule", element: <Page Component={UserList} hoc={withAuth} /> },
-      { path: "/askdaysi/UserModule/new", element: <Page Component={UserForm} hoc={withAuth} /> },
-      { path: "/askdaysi/UserModule/:id", element: <Page Component={UserForm} hoc={withAuth} /> },
+      { path: "/askdaysi/TeacherModule", element: <Page Component={TeacherList} hoc={withAuth} /> },
+      { path: "/askdaysi/TeacherModule/new", element: <Page Component={TeacherForm} hoc={withAuth} /> },
+      { path: "/askdaysi/TeacherModule/:id", element: <Page Component={TeacherForm} hoc={withAuth} /> },
 
         // SusbcriptionModule
       // -----------------------
