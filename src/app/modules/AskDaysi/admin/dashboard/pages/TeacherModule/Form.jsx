@@ -32,6 +32,13 @@ export default function TeacherForm() {
     qualification: "",
   });
 
+  // Validation errors
+  const [errors, setErrors] = useState({
+    firstName: "",
+    lastName: "",
+    email: "",
+  });
+
   const [formError, setFormError] = useState({
     isError: false,
     message: "",
@@ -60,6 +67,7 @@ export default function TeacherForm() {
     },
   });
 
+  //GraphQL Mutation
   const { mutate, isPending } = useMutation({
     mutationFn: gqlMutate,
     onSuccess: () => {
@@ -74,8 +82,44 @@ export default function TeacherForm() {
       }),
   });
 
+  // Validation Function
+  const validate = () => {
+    let temp = { firstName: "", lastName: "", email: "" };
+    let isValid = true;
+
+    if (!values.firstName.trim()) {
+      temp.firstName = "First name is required";
+      isValid = false;
+    } else if (!/^[A-Za-z]+$/.test(values.firstName)) {
+      temp.firstName = "Only alphabets allowed";
+      isValid = false;
+    }
+
+    if (!values.lastName.trim()) {
+      temp.lastName = "Last name is required";
+      isValid = false;
+    } else if (!/^[A-Za-z]+$/.test(values.lastName)) {
+      temp.lastName = "Only alphabets allowed";
+      isValid = false;
+    }
+
+    if (!values.email.trim()) {
+      temp.email = "Email is required";
+      isValid = false;
+    } else if (!/\S+@\S+\.\S+/.test(values.email)) {
+      temp.email = "Invalid email format";
+      isValid = false;
+    }
+
+    setErrors(temp);
+    return isValid;
+  };
+
+// Submit Handler
   const handleSubmit = (e) => {
     e.preventDefault();
+
+      if (!validate()) return;
 
     const gql = params.id
       ? updateTeacher({ ...values, id: params.id })
@@ -111,6 +155,8 @@ export default function TeacherForm() {
                 onChange={(e) =>
                   setValues({ ...values, firstName: e.target.value })
                 }
+                error={!!errors.firstName}
+                helperText={errors.firstName}
                 fullWidth
               />
 
@@ -120,6 +166,8 @@ export default function TeacherForm() {
                 onChange={(e) =>
                   setValues({ ...values, lastName: e.target.value })
                 }
+                error={!!errors.lastName}
+                helperText={errors.lastName}
                 fullWidth
               />
 
@@ -129,6 +177,8 @@ export default function TeacherForm() {
                 onChange={(e) =>
                   setValues({ ...values, email: e.target.value })
                 }
+                error={!!errors.email}
+                helperText={errors.email}
                 fullWidth
               />
 

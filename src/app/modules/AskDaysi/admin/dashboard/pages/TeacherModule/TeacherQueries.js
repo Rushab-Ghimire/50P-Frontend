@@ -3,7 +3,7 @@ import { PER_PAGE } from "@app/_utilities/constants/paths";
 /* ===========================
    Fetch paginated list
    =========================== */
-export const GET_TEACHERS = (search = "", page_num = 1) => `
+export const GET_TEACHERS = (search = 1, page_num = 1) => `
   query {
     allTeachers(
       search: "${search}",

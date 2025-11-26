@@ -1,217 +1,159 @@
-import React, { useEffect, useState } from "react";
+// SubscriptionForm.jsx
+import React, { useEffect, useState ,useRef} from "react";
+import { useParams, useNavigate } from "react-router-dom";
+import { useQuery, useMutation } from "react-query";
+import * as Yup from "yup";
 import {
   Box,
   Button,
   Stack,
   Typography,
   Alert,
+  CircularProgress,
   TextField,
   Paper,
   Container,
+  FormControl,
+  InputLabel,
+  Select,
   MenuItem,
-  Switch,
-  FormControlLabel,
+  IconButton,
 } from "@mui/material";
-import { useNavigate, useParams } from "react-router-dom";
-import { dummySubscriptions } from "./SubscriptionQueries";
+// import SearchOutlinedIcon from "@mui/icons-material/SearchOutlined";
+import { gqlQuery, gqlMutate, queryClient } from "@app/_utilities/http.js";
+import { GET_SUBSCRIPTION, CREATE_SUBSCRIPTION, UPDATE_SUBSCRIPTION } from "./SubscriptionQueries";
 
+// validation schema
+const validationSchema = Yup.object({
+  name: Yup.string().required("name is required"),
+  price: Yup.number().typeError("Must be a number").required("Price are required"),
+  status: Yup.string().required("Status is required"),
+ 
+});
+
+// Form: 
 export default function SubscriptionForm() {
   const navigate = useNavigate();
-  const { id } = useParams();
+  const params = useParams(); // params.id when editing
+  const [values, setValues] = useState({ name: "",  price: "", status: "" });
+  const [formError, setFormError] = useState({ isError: false, message: "" });
 
-  const [values, setValues] = useState({
-    subscription_id: "",
-    user_id: "",
-    course_id: "",
-    subscription_type: "",
-    is_active: false,
-    price: "",
-    payment_status: "",
-    transaction_id: "",
+
+  // fetch all 
+  const { isLoading } = useQuery({
+    queryKey: ["SubscriptionModule", params.id],
+    queryFn: ({ signal }) =>
+      gqlQuery({ signal, path: "/graphql", inData: { gql: GET_TRANSACTION(params.id) } }),
+    enabled: !!params.id,
+    onSuccess: (res) => {
+      const rows = res?.allSubscriptions?.rows || [];
+      
+      const item = rows.find((r) => String(r.id) === String(params.id));
+      if (item) {
+        setValues({
+          name: item.name || "",
+          price: item.price ?? "",
+          status: item.status || "",
+          
+        });
+      }
+    },
   });
 
-  const [error, setError] = useState("");
+  // create / update mutation
+  const { mutate, isPending } = useMutation({
+    mutationFn: gqlMutate,
+    onSuccess: () => {
+      queryClient.invalidateQueries(["SubscriptionModule"]);
+      navigate("/askdaysi/SubscriptionModule");
+    },
+    onError: (err) => setFormError({ isError: true, message: err?.info?.message || err?.message || "Something went wrong." }),
+  });
 
-  // Load existing data for edit
-  useEffect(() => {
-    if (id) {
-      const subscription = dummySubscriptions.find(
-        (s) => String(s.subscription_id) === String(id)
-      );
-      if (subscription) {
-        setValues(subscription);
-      } else {
-        setError("Subscription not found (dummy)");
-      }
+  // submit handler
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setFormError({ isError: false, message: "" });
+    try {
+      await validationSchema.validate(values, { abortEarly: false });
+
+      const gql = params.id
+        ? updateSubscription({ ...values, id: params.id })
+        : createSubscription(values);
+
+      mutate({ path: "/graphql", inData: { gql } });
+    } catch (err) {
+      setFormError({ isError: true, message: (err.errors || []).join(", ") || err.message });
     }
-  }, [id]);
+  };
 
-  // Handle form value change
+  // controlled inputs
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setValues((v) => ({ ...v, [name]: value }));
+    setValues((s) => ({ ...s, [name]: value }));
   };
 
-  const handleToggle = (e) => {
-    setValues((v) => ({ ...v, is_active: e.target.checked }));
-  };
-
-  // Save/Update
-  const handleSubmit = (e) => {
-    e.preventDefault();
-
-    // Simple validation
-    if (
-      !values.user_id ||
-      !values.course_id ||
-      !values.subscription_type ||
-      !values.price
-    ) {
-      setError("Please fill all required fields.");
-      return;
-    }
-
-    if (id) {
-      // Update dummy record
-      const index = dummySubscriptions.findIndex(
-        (s) => String(s.subscription_id) === String(id)
-      );
-      if (index !== -1) {
-        dummySubscriptions[index] = values;
-        alert("Subscription updated (dummy)");
-      }
-    } else {
-      // Add new dummy record
-      const newId =
-        dummySubscriptions.length > 0
-          ? dummySubscriptions[dummySubscriptions.length - 1].subscription_id + 1
-          : 1;
-
-      dummySubscriptions.push({
-        ...values,
-        subscription_id: newId,
-      });
-
-      alert("Subscription added (dummy)");
-    }
-
-    navigate("/askdaysi/SubscriptionModule");
-  };
+  // Keep UI tidy: if user visits /askdaysi/transactions/new then clear any loaded values
+  useEffect(() => {
+    if (!params.id) setValues({ name: "", price: "", status: "" });
+  }, [params.id]);
 
   return (
     <Container maxWidth="sm" sx={{ py: 5 }}>
-      <Paper
-        sx={{
-          p: 4,
-          borderRadius: 4,
-          boxShadow: "0 4px 22px rgba(0,0,0,0.08)",
-        }}
-      >
-        <Typography variant="h5" fontWeight={700} sx={{ mb: 3 }}>
-          {id ? "Edit Subscription" : "Add Subscription"}
+      <Paper sx={{ p: 4, borderRadius: 3, boxShadow: 3 }}>
+        <Typography variant="h5" fontWeight={600} sx={{ mb: 3 }}>
+          {params.id ? "Edit Subscription" : "update Subscription"}
         </Typography>
+        
+           
+        {formError.isError && <Alert severity="error" sx={{ mb: 2 }}>{formError.message}</Alert>}
 
-        {error && (
-          <Alert severity="error" sx={{ mb: 2 }}>
-            {error}
-          </Alert>
-        )}
-
-        <form onSubmit={handleSubmit}>
-          <Stack spacing={3}>
-            <TextField
-              label="User ID"
-              name="user_id"
-              type="number"
-              value={values.user_id}
-              onChange={handleChange}
-              fullWidth
-            />
-
-            <TextField
-              label="Course ID"
-              name="course_id"
-              type="number"
-              value={values.course_id}
-              onChange={handleChange}
-              fullWidth
-            />
-
-            <TextField
-              select
-              label="Subscription Type"
-              name="subscription_type"
-              value={values.subscription_type}
-              onChange={handleChange}
-              fullWidth
-            >
-              <MenuItem value="monthly">Monthly</MenuItem>
-              <MenuItem value="yearly">Yearly</MenuItem>
-              <MenuItem value="lifetime">Lifetime</MenuItem>
-            </TextField>
-
-            <FormControlLabel
-              control={
-                <Switch
-                  checked={values.is_active}
-                  onChange={handleToggle}
-                  name="is_active"
-                />
-              }
-              label="Active"
-            />
-
-            <TextField
-              label="Price"
-              name="price"
-              type="number"
-              value={values.price}
-              onChange={handleChange}
-              fullWidth
-            />
-
-            <TextField
-              select
-              label="Payment Status"
-              name="payment_status"
-              value={values.payment_status}
-              onChange={handleChange}
-              fullWidth
-            >
-              <MenuItem value="pending">Pending</MenuItem>
-              <MenuItem value="completed">Completed</MenuItem>
-              <MenuItem value="failed">Failed</MenuItem>
-            </TextField>
-
-            <TextField
-              label="Transaction ID"
-              name="transaction_id"
-              value={values.transaction_id}
-              onChange={handleChange}
-              fullWidth
-            />
-
-            {/* Buttons */}
-            <Box display="flex" justifyContent="flex-end" gap={2} mt={2}>
-              <Button
-                type="submit"
-                variant="contained"
-                sx={{ px: 3, borderRadius: 2 }}
-              >
-                {id ? "Update" : "Save"}
-              </Button>
-
-              <Button
-                variant="outlined"
-                color="error"
-                sx={{ px: 3, borderRadius: 2 }}
-                onClick={() => navigate("/subscriptions")}
-              >
-                Cancel
-              </Button>
-            </Box>
+        {isLoading ? (
+          <Stack alignItems="center" sx={{ py: 4 }}>
+            <CircularProgress />
           </Stack>
-        </form>
+        ) : (
+          <form onSubmit={handleSubmit}>
+            <Stack spacing={3}>
+              <TextField
+                label="Name"
+                name="Name"
+                value={values.name}
+                onChange={handleChange}
+                fullWidth
+              />
+
+
+
+              <FormControl fullWidth>
+                <InputLabel>Status</InputLabel>
+                <Select name="status" value={values.status} onChange={handleChange} label="Status">
+                  <MenuItem value="new">New</MenuItem>
+                  
+                  <MenuItem value="completed">Completed</MenuItem>
+                </Select>
+              </FormControl>
+
+              <TextField
+                label="Price"
+                name="Price"
+                type="number"
+                value={values.tokens}
+                onChange={handleChange}
+                fullWidth
+              />
+
+              <Box display="flex" justifyContent="flex-end" gap={2} sx={{ mt: 1 }}>
+                <Button type="submit" variant="contained" disabled={isPending}>
+                  {params.id ? "Update" : "Save"}
+                </Button>
+                <Button variant="outlined" color="error" onClick={() => navigate("/askdaysi/SubsciptionModule")}>
+                  Cancel
+                </Button>
+              </Box>
+            </Stack>
+          </form>
+        )}
       </Paper>
     </Container>
   );

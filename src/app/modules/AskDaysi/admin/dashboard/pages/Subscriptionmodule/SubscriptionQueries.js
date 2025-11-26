@@ -1,12 +1,89 @@
-export let dummySubscriptions = [
-  {
-    subscription_id: 1,
-    user_id: 10,
-    course_id: 101,
-    subscription_type: "monthly",
-    is_active: true,
-    price: 19.99,
-    payment_status: "pending",
-    transaction_id: "TXN123456",
-  },
-];
+import { PER_PAGE } from "@app/_utilities/constants/paths";
+
+// =====================================
+// Fetch paginated list
+// =====================================
+export const GET_SUBSCRIPTIONS = (search = "", page_num = 1) => `
+  query {
+    allSubscriptions(
+      search: "${search}",
+      skip: ${(page_num - 1) * PER_PAGE},
+      first: ${PER_PAGE}
+    ) {
+      totalRows
+      rows {
+        id
+        name
+        price
+        status
+      }
+    }
+  }
+`;
+
+
+// =====================================
+// Fetch single subscription
+// (If backend supports direct fetch)
+// =====================================
+export const GET_SUBSCRIPTION = (id) => `
+  query {
+    subscription(id: "${id}") {
+      id
+      name
+      price
+      status
+    }
+  }
+`;
+
+
+// =====================================
+// Create subscription
+// =====================================
+export const CREATE_SUBSCRIPTION = (data) => `
+  mutation {
+    createSubscription(
+      name: "${data.name}",
+      price: ${data.price},
+      status: "${data.status}"
+    ) {
+      id
+      name
+      price
+      status
+    }
+  }
+`;
+
+
+// =====================================
+// Update subscription
+// =====================================
+export const UPDATE_SUBSCRIPTION = (data) => `
+  mutation {
+    updateSubscription(
+      id: "${data.id}",
+      name: "${data.name}",
+      price: ${data.price},
+      status: "${data.status}"
+    ) {
+      id
+      name
+      price
+      status
+    }
+  }
+`;
+
+
+// =====================================
+// Delete subscription
+// =====================================
+export const DELETE_SUBSCRIPTION = (id) => `
+  mutation {
+    deleteSubscription(id: "${id}") {
+      ok
+    }
+  }
+`;
