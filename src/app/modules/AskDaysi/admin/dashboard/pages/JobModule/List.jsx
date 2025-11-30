@@ -1,115 +1,72 @@
-// JobList.jsx
-import React, { useState, useRef } from "react";
-
+// JobsList.jsx
+import React, { useRef, useState } from "react";
 import {
-  Box,
-  Button,
-  IconButton,
-  Paper,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-  Typography,
-  CircularProgress,
-  Alert,
-  Stack,
-  Tooltip,
-  TextField,
+  Box, Button, IconButton, Paper, Table, TableBody, TableCell,
+  TableContainer, TableHead, TableRow, Typography, CircularProgress,
+  Alert, Stack, Tooltip, TextField
 } from "@mui/material";
-
 import { Add, Edit, Delete, SearchOutlined } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
 import { useQuery, useMutation } from "react-query";
-
-import { gqlQuery, gqlMutate, queryClient } from "@app/_utilities/http.js";
+import { gqlQuery, gqlMutate, queryClient } from "@app/_utilities/http";
+import { GET_JOBS, deleteJob } from "./JobQueries";
 import { PER_PAGE } from "@app/_utilities/constants/paths";
 import { AppPagination } from "@app/_components/_core";
 
-export default function JobList() {
+export default function JobsList() {
   const navigate = useNavigate();
-
+  const searchInput = useRef();
   const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
-  const searchRef = useRef();
 
-  // ------------------- FETCH JOBS -------------------
+  // Fetch Jobs
   const { data, isLoading, isError, error } = useQuery({
     queryKey: ["jobs", searchTerm, currentPage],
     queryFn: ({ signal }) => {
-      const gql = `
-        # TODO: Add GraphQL Query to fetch jobs with pagination + search
-        # Example:
-        # query {
-        #   jobs(search: "${searchTerm}", page: ${currentPage}) {
-        #     rows { id job_title salary ... }
-        #     totalRows
-        #   }
-        # }
-      `;
+      const gql = GET_JOBS(searchTerm, currentPage);
       return gqlQuery({ signal, path: "/graphql", inData: { gql } });
     },
     keepPreviousData: true,
   });
 
-  // ------------------- DELETE MUTATION -------------------
-  const { mutate: deleteJob, isPending: isDeleting } = useMutation({
+  // Delete Job
+  const { mutate: removeJob, isPending: isDeleting } = useMutation({
     mutationFn: gqlMutate,
     onSuccess: () => queryClient.invalidateQueries(["jobs"]),
   });
 
   const handleDelete = (id) => {
     if (!window.confirm("Delete this job?")) return;
-
-    const gql = `
-      # TODO: Add Delete Job Mutation
-    `;
-
-    deleteJob({ path: "/graphql", inData: { gql } });
+    const gql = deleteJob(id);
+    removeJob({ path: "/graphql", inData: { gql } });
   };
 
-  // ------------------- SEARCH + PAGINATION -------------------
-  const handleSearch = (e) => {
+  // Search
+  const handleSearchSubmit = (e) => {
     e.preventDefault();
-    setSearchTerm(searchRef.current.value || "");
+    setSearchTerm(searchInput.current.value || "");
     setCurrentPage(1);
   };
 
-  const handlePage = (newPage) => {
-    setCurrentPage(newPage);
-  };
+  const handlePage = (page) => setCurrentPage(page);
 
-  const rows = data?.rows || [];
-  const totalRows = data?.totalRows || 0;
+  const rows = data?.allJobs?.rows || [];
+  const totalRows = data?.allJobs?.totalRows || 0;
 
-  // ------------------- UI -------------------
   return (
     <Box sx={{ p: 4 }}>
-      <Stack
-        direction="row"
-        justifyContent="space-between"
-        alignItems="center"
-        sx={{ mb: 3 }}
-      >
-        <Typography variant="h5" fontWeight={600}>
-          Job Listings
-        </Typography>
-        <Button
-          variant="contained"
-          startIcon={<Add />}
-          onClick={() => navigate("/jobs/new")}
-        >
+      <Stack direction="row" justifyContent="space-between" sx={{ mb: 3 }}>
+        <Typography variant="h5" fontWeight={600}>Jobs Listings</Typography>
+        <Button variant="contained" startIcon={<Add />} onClick={() => navigate("/askdaysi/JobModule/new")}>
           Add Job
         </Button>
       </Stack>
 
-      {/* Search */}
-      <Box component="form" onSubmit={handleSearch} sx={{ mb: 3 }}>
+      {/* SEARCH */}
+      <Box component="form" onSubmit={handleSearchSubmit} sx={{ mb: 3 }}>
         <TextField
           size="small"
-          inputRef={searchRef}
+          inputRef={searchInput}
           placeholder="Search jobs..."
           InputProps={{
             endAdornment: (
@@ -121,26 +78,22 @@ export default function JobList() {
         />
       </Box>
 
-      {/* Loading */}
       {isLoading ? (
         <Box display="flex" justifyContent="center" sx={{ py: 6 }}>
           <CircularProgress />
         </Box>
       ) : isError ? (
-        <Alert severity="error">
-          {error?.info?.message || error?.message || "Failed to load jobs"}
-        </Alert>
+        <Alert severity="error">{error?.info?.message || error?.message}</Alert>
       ) : (
         <TableContainer component={Paper} sx={{ borderRadius: 2, boxShadow: 3 }}>
           <Table>
             <TableHead>
               <TableRow sx={{ backgroundColor: "#f5f5f5" }}>
                 <TableCell><strong>ID</strong></TableCell>
-                <TableCell><strong>Job Title</strong></TableCell>
-                <TableCell><strong>Location</strong></TableCell>
-                <TableCell><strong>Type</strong></TableCell>
-                <TableCell><strong>Salary</strong></TableCell>
+                <TableCell><strong>Title</strong></TableCell>
                 <TableCell><strong>Category</strong></TableCell>
+                <TableCell><strong>Location</strong></TableCell>
+                <TableCell><strong>Salary</strong></TableCell>
                 <TableCell align="center"><strong>Actions</strong></TableCell>
               </TableRow>
             </TableHead>
@@ -148,51 +101,40 @@ export default function JobList() {
             <TableBody>
               {rows.length === 0 ? (
                 <TableRow>
-                  <TableCell colSpan={7} align="center">
-                    No jobs found.
-                  </TableCell>
+                  <TableCell colSpan={6} align="center">No jobs found.</TableCell>
                 </TableRow>
               ) : (
-                rows.map((job) => (
-                  <TableRow key={job.id} hover>
-                    <TableCell>{job.id}</TableCell>
-                    <TableCell>{job.job_title}</TableCell>
-                    <TableCell>{job.location}</TableCell>
-                    <TableCell>{job.employee_type}</TableCell>
-                    <TableCell>{job.salary}</TableCell>
-                    <TableCell>{job.category}</TableCell>
+                rows.map((r) => (
+                  <TableRow key={r.jobId} hover>
+                    <TableCell>{r.jobId}</TableCell>
+                    <TableCell>{r.jobTitle}</TableCell>
+                    <TableCell>{r.category}</TableCell>
+                    <TableCell>{r.location}</TableCell>
+                    <TableCell>{r.salary}</TableCell>
 
                     <TableCell align="center">
                       <Tooltip title="Edit">
-                        <IconButton
-                          color="primary"
-                          onClick={() =>
-                            navigate(`/jobs/${job.id}`)
-                          }
-                        >
+                        <IconButton color="primary" onClick={() => navigate(`/JobModule/${r.jobId}`)}>
                           <Edit />
                         </IconButton>
                       </Tooltip>
-
                       <Tooltip title="Delete">
-                        <IconButton
-                          color="error"
-                          onClick={() => handleDelete(job.id)}
-                          disabled={isDeleting}
-                        >
+                        <IconButton color="error" disabled={isDeleting} onClick={() => handleDelete(r.jobId)}>
                           <Delete />
                         </IconButton>
                       </Tooltip>
                     </TableCell>
+
                   </TableRow>
                 ))
               )}
             </TableBody>
+
           </Table>
         </TableContainer>
       )}
 
-      {/* Pagination */}
+      {/* PAGINATION */}
       {totalRows > 0 && (
         <AppPagination
           current_page={currentPage}
@@ -201,6 +143,7 @@ export default function JobList() {
           onHandleChangePage={handlePage}
         />
       )}
+
     </Box>
   );
 }

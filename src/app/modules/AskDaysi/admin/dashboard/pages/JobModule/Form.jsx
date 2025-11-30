@@ -1,162 +1,95 @@
 // JobForm.jsx
 import React, { useEffect, useState } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import {
+  Box, Button, Stack, Typography, Alert, CircularProgress,
+  TextField, Paper, Container, FormControl, InputLabel, Select, MenuItem
+} from "@mui/material";
+import { useNavigate, useParams } from "react-router-dom";
 import { useQuery, useMutation } from "react-query";
 import * as Yup from "yup";
 
-import {
-  Box,
-  Button,
-  Stack,
-  Typography,
-  Alert,
-  CircularProgress,
-  TextField,
-  Paper,
-  Container,
-  FormControl,
-  InputLabel,
-  Select,
-  MenuItem,
-} from "@mui/material";
+import { gqlQuery, gqlMutate, queryClient } from "@app/_utilities/http";
+import { GET_JOB, createJob, updateJob } from "./JobQueries";
 
-import { gqlQuery, gqlMutate, queryClient } from "@app/_utilities/http.js";
-
-// ------------------- VALIDATION -------------------
+// Validation
 const validationSchema = Yup.object({
-  job_title: Yup.string().required("Job title is required"),
+  jobTitle: Yup.string().required("Job title is required"),
   description: Yup.string().required("Description is required"),
+  qualification: Yup.string().required("Qualification is required"),
+  location: Yup.string().required("Location is required"),
   salary: Yup.string().required("Salary is required"),
+  employmentType: Yup.string().required("Employment type is required"),
+  category: Yup.string().required("Category is required"),
+  experience: Yup.string().required("Experience is required"),
 });
 
-// ------------------- MAIN COMPONENT -------------------
 export default function JobForm() {
   const navigate = useNavigate();
-  const params = useParams(); // params.id when editing
+  const params = useParams();
 
   const [values, setValues] = useState({
-    job_title: "",
+    jobTitle: "",
     description: "",
     qualification: "",
     location: "",
     salary: "",
-    employee_type: "Full-Time",
+    employmentType: "",
     category: "",
     experience: "",
   });
 
-  const [formError, setFormError] = useState({
-    isError: false,
-    message: "",
-  });
+  const [formError, setFormError] = useState({ isError: false, message: "" });
 
-  // ------------------- FETCH SINGLE JOB (EDIT MODE) -------------------
+  // FETCH job when editing
   const { isLoading } = useQuery({
     queryKey: ["job", params.id],
     queryFn: ({ signal }) =>
-      gqlQuery({
-        signal,
-        path: "/graphql",
-        inData: {
-          gql: `
-            # TODO: Add GraphQL Query to get single job by ID
-            # Example:
-            # query {
-            #   job(id: ${params.id}) {
-            #     id
-            #     job_title
-            #     description
-            #     ...
-            #   }
-            # }
-          `,
-        },
-      }),
+      gqlQuery({ signal, path: "/graphql", inData: { gql: GET_JOB(params.id) } }),
     enabled: !!params.id,
     onSuccess: (res) => {
-      const job = res?.job;
-      if (job) {
-        setValues({
-          job_title: job.job_title || "",
-          description: job.description || "",
-          qualification: job.qualification || "",
-          location: job.location || "",
-          salary: job.salary || "",
-          employee_type: job.employee_type || "Full-Time",
-          category: job.category || "",
-          experience: job.experience || "",
-        });
-      }
+      const rows = res?.allJobs?.rows || [];
+      const job = rows.find((r) => String(r.jobId) === String(params.id));
+      if (job) setValues(job);
     },
   });
 
-  // ------------------- CREATE / UPDATE MUTATION -------------------
+  // CREATE / UPDATE
   const { mutate, isPending } = useMutation({
     mutationFn: gqlMutate,
     onSuccess: () => {
       queryClient.invalidateQueries(["jobs"]);
-      navigate("/jobs");
+      navigate("/JobModule");
     },
     onError: (err) =>
       setFormError({
         isError: true,
-        message:
-          err?.info?.message || err?.message || "Something went wrong.",
+        message: err?.info?.message || "Something went wrong.",
       }),
   });
 
-  // ------------------- SUBMIT HANDLER -------------------
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     setFormError({ isError: false, message: "" });
 
     try {
       await validationSchema.validate(values, { abortEarly: false });
 
       const gql = params.id
-        ? `
-            # TODO: Add Update Job Mutation
-          `
-        : `
-            # TODO: Add Create Job Mutation
-          `;
+        ? updateJob({ ...values, jobId: params.id })
+        : createJob(values);
 
       mutate({ path: "/graphql", inData: { gql } });
-    } catch (error) {
-      setFormError({
-        isError: true,
-        message: (error.errors || []).join(", "),
-      });
+    } catch (err) {
+      setFormError({ isError: true, message: err.errors.join(", ") });
     }
   };
 
-  // ------------------- HANDLE INPUT CHANGE -------------------
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setValues((prev) => ({ ...prev, [name]: value }));
-  };
+  const handleChange = (e) =>
+    setValues((prev) => ({ ...prev, [e.target.name]: e.target.value }));
 
-  // Reset form when creating new
-  useEffect(() => {
-    if (!params.id) {
-      setValues({
-        job_title: "",
-        description: "",
-        qualification: "",
-        location: "",
-        salary: "",
-        employee_type: "Full-Time",
-        category: "",
-        experience: "",
-      });
-    }
-  }, [params.id]);
-
-  // ------------------- UI -------------------
   return (
     <Container maxWidth="sm" sx={{ py: 5 }}>
-      <Paper sx={{ p: 4, borderRadius: 3, boxShadow: 3 }}>
+      <Paper sx={{ p: 4, borderRadius: 3 }}>
         <Typography variant="h5" fontWeight={600} sx={{ mb: 3 }}>
           {params.id ? "Edit Job" : "Add Job"}
         </Typography>
@@ -174,89 +107,40 @@ export default function JobForm() {
         ) : (
           <form onSubmit={handleSubmit}>
             <Stack spacing={3}>
-              <TextField
-                label="Job Title"
-                name="job_title"
-                value={values.job_title}
-                onChange={handleChange}
-                fullWidth
-              />
 
-              <TextField
-                label="Description"
-                name="description"
-                multiline
-                rows={3}
-                value={values.description}
-                onChange={handleChange}
-                fullWidth
-              />
+              <TextField label="Job Title" name="jobTitle" value={values.jobTitle} onChange={handleChange} fullWidth />
 
-              <TextField
-                label="Qualification"
-                name="qualification"
-                value={values.qualification}
-                onChange={handleChange}
-                fullWidth
-              />
+              <TextField multiline rows={3} label="Description" name="description" value={values.description} onChange={handleChange} fullWidth />
 
-              <TextField
-                label="Location"
-                name="location"
-                value={values.location}
-                onChange={handleChange}
-                fullWidth
-              />
+              <TextField label="Qualification" name="qualification" value={values.qualification} onChange={handleChange} fullWidth />
 
-              <TextField
-                label="Salary"
-                name="salary"
-                value={values.salary}
-                onChange={handleChange}
-                fullWidth
-              />
+              <TextField label="Location" name="location" value={values.location} onChange={handleChange} fullWidth />
+
+              <TextField label="Salary" name="salary" value={values.salary} onChange={handleChange} fullWidth />
 
               <FormControl fullWidth>
-                <InputLabel>Employee Type</InputLabel>
-                <Select
-                  name="employee_type"
-                  label="Employee Type"
-                  value={values.employee_type}
-                  onChange={handleChange}
-                >
+                <InputLabel>Employment Type</InputLabel>
+                <Select name="employmentType" label="Employment Type" value={values.employmentType} onChange={handleChange}>
                   <MenuItem value="Full-Time">Full-Time</MenuItem>
                   <MenuItem value="Part-Time">Part-Time</MenuItem>
+                  <MenuItem value="Contract">Contract</MenuItem>
                 </Select>
               </FormControl>
 
-              <TextField
-                label="Category"
-                name="category"
-                value={values.category}
-                onChange={handleChange}
-                fullWidth
-              />
+              <TextField label="Category" name="category" value={values.category} onChange={handleChange} fullWidth />
 
-              <TextField
-                label="Experience"
-                name="experience"
-                value={values.experience}
-                onChange={handleChange}
-                fullWidth
-              />
+              <TextField label="Experience" name="experience" value={values.experience} onChange={handleChange} fullWidth />
 
               <Box display="flex" justifyContent="flex-end" gap={2}>
                 <Button type="submit" variant="contained" disabled={isPending}>
                   {params.id ? "Update" : "Save"}
                 </Button>
-                <Button
-                  variant="outlined"
-                  color="error"
-                  onClick={() => navigate("/jobs")}
-                >
+
+                <Button color="error" variant="outlined" onClick={() => navigate("/askdaysi/JobModule")}>
                   Cancel
                 </Button>
               </Box>
+
             </Stack>
           </form>
         )}

@@ -1,6 +1,4 @@
 
-
-// list.jsx
 import React, { useState } from "react";
 import {
   Box,
@@ -18,25 +16,50 @@ import {
   TextField,
 } from "@mui/material";
 import { Add, Edit, Delete, SearchOutlined } from "@mui/icons-material";
-
-const dummyCourses = [
-  { id: 1, course_name: "Web Development", teacher: "Raj", duration: "3 months", level: "Beginner" },
-  { id: 2, course_name: "Graphic Design", teacher: "Mina", duration: "2 months", level: "Intermediate" },
-  { id: 3, course_name: "Data Science", teacher: "Rohan", duration: "40 hours", level: "Advanced" },
-];
+import { useNavigate } from "react-router-dom";
+import { useQuery, useMutation } from "react-query";
+import { gqlQuery, gqlMutate, queryClient } from "@app/_utilities/http.js";
+import { GET_COURSES, deleteCourse } from "./CourseQueries";
 
 export function CourseList() {
+  const navigate = useNavigate();
+
   const [searchTerm, setSearchTerm] = useState("");
 
-  const filtered = dummyCourses.filter((c) =>
-    c.course_name.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  const { data, isLoading } = useQuery({
+    queryKey: ["courses", searchTerm],
+    queryFn: ({ signal }) =>
+      gqlQuery({
+        signal,
+        path: "/graphql",
+        inData: { gql: GET_COURSES(searchTerm, 1) },
+      }),
+    keepPreviousData: true,
+  });
+
+  const { mutate: deleteCourseMutate } = useMutation({
+    mutationFn: gqlMutate,
+    onSuccess: () => queryClient.invalidateQueries(["courses"]),
+  });
+
+  const handleDelete = (id) => {
+    if (window.confirm("Are you sure you want to delete this course?")) {
+      deleteCourseMutate({
+        path: "/graphql",
+        inData: { gql: deleteCourse(id) },
+      });
+    }
+  };
+
+  const rows = data?.allCourses?.rows || [];
 
   return (
     <Box sx={{ p: 4 }}>
-      <Typography variant="h5" fontWeight={600} sx={{ mb: 3 }}>Course List</Typography>
+      <Typography variant="h5" fontWeight={600} sx={{ mb: 3 }}>
+        Course List
+      </Typography>
 
-      <Box component="form" sx={{ mb: 3 }} onSubmit={(e) => e.preventDefault()}>
+      <Box sx={{ mb: 3 }}>
         <TextField
           size="small"
           placeholder="Search courses..."
@@ -56,7 +79,7 @@ export function CourseList() {
           <TableHead>
             <TableRow sx={{ backgroundColor: "#f5f5f5" }}>
               <TableCell><strong>ID</strong></TableCell>
-              <TableCell><strong>Course Name</strong></TableCell>
+              <TableCell><strong>Course</strong></TableCell>
               <TableCell><strong>Teacher</strong></TableCell>
               <TableCell><strong>Duration</strong></TableCell>
               <TableCell><strong>Level</strong></TableCell>
@@ -65,22 +88,40 @@ export function CourseList() {
           </TableHead>
 
           <TableBody>
-            {filtered.length === 0 ? (
-              <TableRow><TableCell colSpan={6} align="center">No courses found.</TableCell></TableRow>
+            {rows.length === 0 ? (
+              <TableRow>
+                <TableCell colSpan={6} align="center">
+                  No courses found.
+                </TableCell>
+              </TableRow>
             ) : (
-              filtered.map((course) => (
+              rows.map((course) => (
                 <TableRow key={course.id} hover>
                   <TableCell>{course.id}</TableCell>
-                  <TableCell>{course.course_name}</TableCell>
-                  <TableCell>{course.teacher}</TableCell>
+                  <TableCell>{course.courseName}</TableCell>
+                  <TableCell>{course.teacher?.fullName}</TableCell>
                   <TableCell>{course.duration}</TableCell>
                   <TableCell>{course.level}</TableCell>
+
                   <TableCell align="center">
                     <Tooltip title="Edit">
-                      <IconButton color="primary"><Edit /></IconButton>
+                      <IconButton
+                        color="primary"
+                        onClick={() =>
+                          navigate(`/askdaysi/CourseModule/${course.id}`)
+                        }
+                      >
+                        <Edit />
+                      </IconButton>
                     </Tooltip>
+
                     <Tooltip title="Delete">
-                      <IconButton color="error"><Delete /></IconButton>
+                      <IconButton
+                        color="error"
+                        onClick={() => handleDelete(course.id)}
+                      >
+                        <Delete />
+                      </IconButton>
                     </Tooltip>
                   </TableCell>
                 </TableRow>
@@ -90,10 +131,16 @@ export function CourseList() {
         </Table>
       </TableContainer>
 
-      <Button variant="contained" startIcon={<Add />} sx={{ mt: 3 }}>
+      <Button
+        variant="contained"
+        startIcon={<Add />}
+        sx={{ mt: 3 }}
+        onClick={() => navigate("/askdaysi/CourseModule/new")}
+      >
         Add Course
       </Button>
     </Box>
   );
 }
+
 export default CourseList;
