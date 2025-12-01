@@ -1,231 +1,79 @@
-// import React, { useState } from "react";
-// import {
-//   Box,
-//   Button,
-//   IconButton,
-//   Paper,
-//   Table,
-//   TableBody,
-//   TableCell,
-//   TableContainer,
-//   TableHead,
-//   TableRow,
-//   Typography,
-//   TextField,
-//   Stack,
-//   Tooltip,
-// } from "@mui/material";
-// import { Add, Edit, Delete, SearchOutlined } from "@mui/icons-material";
-// import { useNavigate } from "react-router-dom";
-// import { dummySubscriptions } from "./SubscriptionQueries";
-// import { AppPagination } from "@app/_components/_core";
-// export default function SubscriptionList() {
-//   const navigate = useNavigate();
-
-//   const [searchTerm, setSearchTerm] = useState("");
-
-//   // Filter dummy data
-//   const rows = dummySubscriptions.filter((s) =>
-//     String(s.user_id).includes(searchTerm) ||
-//     String(s.subscription_id).includes(searchTerm)
-//   );
-
-//   const handleDelete = (id) => {
-//     if (!window.confirm("Delete subscription?")) return;
-
-//     const index = dummySubscriptions.findIndex((s) => s.subscription_id === id);
-//     if (index !== -1) dummySubscriptions.splice(index, 1);
-
-//     alert("Deleted (Dummy Only)");
-//   };
-
-//   return (
-//     <Box sx={{ p: 4 }}>
-//       {/* Header */}
-//       <Stack direction="row" justifyContent="space-between" alignItems="center" sx={{ mb: 3 }}>
-//         <Typography variant="h4" fontWeight={600}>
-//           Subscriptions
-//         </Typography>
-
-//         <Button
-//           variant="contained"
-//           startIcon={<Add />}
-//           sx={{ borderRadius: 2, px: 3 }}
-//           onClick={() => navigate("/askdaysi/SubscriptionModule/new")}
-//         >
-//           Add Subscription
-//         </Button>
-//       </Stack>
-
-//       {/* Search */}
-//       <Paper sx={{ p: 2, mb: 4, borderRadius: 3, display: "flex", gap: 2 }}>
-//         <SearchOutlined sx={{ opacity: 0.6, mt: 0.5 }} />
-//         <TextField
-//           placeholder="Search by Subscription ID or User ID..."
-//           variant="standard"
-//           fullWidth
-//           onChange={(e) => setSearchTerm(e.target.value)}
-//         />
-//       </Paper>
-
-//       {/* Table */}
-//       <TableContainer
-//         component={Paper}
-//         sx={{
-//           borderRadius: 4,
-//           boxShadow: "0 5px 25px rgba(0,0,0,0.08)",
-//         }}
-//       >
-//         <Table>
-//           <TableHead>
-//             <TableRow sx={{ background: "#f5f7fa" }}>
-//               {[
-//                 "ID",
-//                 "User",
-//                 "Course",
-//                 "Type",
-//                 "Active",
-//                 "Price",
-//                 "Payment",
-//                 "Transaction",
-//                 "Actions",
-//               ].map((head) => (
-//                 <TableCell key={head} sx={{ fontWeight: 700 }}>
-//                   {head}
-//                 </TableCell>
-//               ))}
-//             </TableRow>
-//           </TableHead>
-
-//           <TableBody>
-//             {rows.length === 0 && (
-//               <TableRow>
-//                 <TableCell colSpan={9} align="center" sx={{ py: 3 }}>
-//                   No subscriptions found.
-//                 </TableCell>
-//               </TableRow>
-//             )}
-
-//             {rows.map((s) => (
-//               <TableRow key={s.subscription_id} hover>
-//                 <TableCell>{s.subscription_id}</TableCell>
-//                 <TableCell>{s.user_id}</TableCell>
-//                 <TableCell>{s.course_id}</TableCell>
-//                 <TableCell>{s.subscription_type}</TableCell>
-//                 <TableCell>{s.is_active ? "Yes" : "No"}</TableCell>
-//                 <TableCell>${s.price}</TableCell>
-//                 <TableCell>{s.payment_status}</TableCell>
-//                 <TableCell sx={{ fontFamily: "monospace" }}>
-//                   {s.transaction_id}
-//                 </TableCell>
-
-//                 <TableCell>
-//                   <Tooltip title="Edit">
-//                     <IconButton onClick={() => navigate(`/askdaysi/SubscriptionModule/${s.subscription_id}`)}>
-//                       <Edit />
-//                     </IconButton>
-//                   </Tooltip>
-
-//                   <Tooltip title="Delete">
-//                     {/* <IconButton color="error" onClick={() => handleDelete(s.subscription_id)}> */}
-//                        <IconButton color="error" onClick={() => handleDelete(s.subscription_id)}>
-//                       <Delete />
-//                     </IconButton>
-//                   </Tooltip>
-//                 </TableCell>
-//               </TableRow>
-//             ))}
-//           </TableBody>
-//         </Table>
-//       </TableContainer>
-//         {/* pagination added */}
-//       {data?.totalRows > 0 && (
-//         <AppPagination
-//           current_page={currentPage}
-//           current_rowsPerPage={PER_PAGE}
-//           totalRows={data.totalRows}
-//           onHandleChangePage={handlePage}
-//         />
-//       )}
-//     </Box>
-//   );
-// }
-
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
+import { useNavigate } from "react-router-dom";
+import { useQuery, useMutation } from "react-query";
 import {
   Box,
   Button,
+  TextField,
   IconButton,
-  Paper,
   Table,
   TableBody,
   TableCell,
   TableContainer,
   TableHead,
   TableRow,
-  Typography,
-  TextField,
+  Paper,
+  CircularProgress,
   Stack,
+  Typography,
   Tooltip,
+  Alert,
 } from "@mui/material";
 import { Add, Edit, Delete, SearchOutlined } from "@mui/icons-material";
-import { useNavigate } from "react-router-dom";
-import { dummySubscriptions } from "./SubscriptionQueries";
+
+import { gqlQuery, gqlMutate, queryClient } from "@app/_utilities/http";
+import { GET_SUBSCRIPTIONS, deleteSubscription } from "./SubscriptionQueries";
+import { PER_PAGE } from "@app/_utilities/constants/paths";
 import { AppPagination } from "@app/_components/_core";
 
 export default function SubscriptionList() {
   const navigate = useNavigate();
-
+  const searchRef = useRef();
   const [searchTerm, setSearchTerm] = useState("");
+  const [page, setPage] = useState(1);
 
-  
-  const [currentPage, setCurrentPage] = useState(1);
-  const PER_PAGE = 10;
+  // Fetch subscriptions
+  const { data, isLoading, isError, error } = useQuery({
+    queryKey: ["subscriptions", searchTerm, page],
+    queryFn: ({ signal }) =>
+      gqlQuery({
+        signal,
+        path: "/graphql",
+        inData: { gql: GET_SUBSCRIPTIONS(searchTerm, page) },
+      }),
+    keepPreviousData: true,
+  });
 
-  // Dummy total rows 
-  const data = {
-    totalRows: dummySubscriptions.length,
-  };
-
-  const handlePage = (event, page) => {
-    setCurrentPage(page);
-  };
-
-  // Filter dummy data
-  const rows = dummySubscriptions.filter(
-    (s) =>
-      String(s.user_id).includes(searchTerm) ||
-      String(s.subscription_id).includes(searchTerm)
-  );
+  // Delete subscription
+  const { mutate: removeSubscription, isLoading: isDeleting } = useMutation({
+    mutationFn: gqlMutate,
+    onSuccess: () => queryClient.invalidateQueries(["subscriptions"]),
+  });
 
   const handleDelete = (id) => {
-    if (!window.confirm("Delete subscription?")) return;
-
-    const index = dummySubscriptions.findIndex(
-      (s) => s.subscription_id === id
-    );
-    if (index !== -1) dummySubscriptions.splice(index, 1);
-
-    alert("Deleted (Dummy Only)");
+    if (!window.confirm("Delete this subscription?")) return;
+    removeSubscription({ path: "/graphql", inData: { gql: deleteSubscription(id) } });
   };
+
+  const handleSearch = (e) => {
+    e.preventDefault();
+    setSearchTerm(searchRef.current?.value || "");
+    setPage(1);
+  };
+
+  const handlePageChange = (newPage) => setPage(newPage);
+
+  const rows = data?.rows || [];
+  const totalRows = data?.totalRows || 0;
 
   return (
     <Box sx={{ p: 4 }}>
-      {/* Header */}
-      <Stack
-        direction="row"
-        justifyContent="space-between"
-        alignItems="center"
-        sx={{ mb: 3 }}
-      >
-        <Typography variant="h4" fontWeight={600}>
-          Subscriptions
-        </Typography>
-
+      {/* Header and Add Button */}
+      <Stack direction="row" justifyContent="space-between" alignItems="center" sx={{ mb: 3 }}>
+        <Typography variant="h5">Subscriptions Module</Typography>
         <Button
           variant="contained"
           startIcon={<Add />}
-          sx={{ borderRadius: 2, px: 3 }}
           onClick={() => navigate("/askdaysi/SubscriptionModule/new")}
         >
           Add Subscription
@@ -233,105 +81,100 @@ export default function SubscriptionList() {
       </Stack>
 
       {/* Search */}
-      <Paper sx={{ p: 2, mb: 4, borderRadius: 3, display: "flex", gap: 2 }}>
-        <SearchOutlined sx={{ opacity: 0.6, mt: 0.5 }} />
+      <Box component="form" onSubmit={handleSearch} sx={{ mb: 3 }}>
         <TextField
-          placeholder="Search by Subscription ID or User ID..."
-          variant="standard"
+          inputRef={searchRef}
+          placeholder="Search subscriptions..."
+          size="small"
           fullWidth
-          onChange={(e) => setSearchTerm(e.target.value)}
+          InputProps={{
+            endAdornment: (
+              <IconButton type="submit">
+                <SearchOutlined />
+              </IconButton>
+            ),
+          }}
         />
-      </Paper>
+      </Box>
 
-      {/* Table */}
-      <TableContainer
-        component={Paper}
-        sx={{
-          borderRadius: 4,
-          boxShadow: "0 5px 25px rgba(0,0,0,0.08)",
-        }}
-      >
-        <Table>
-          <TableHead>
-            <TableRow sx={{ background: "#f5f7fa" }}>
-              {[
-                "ID",
-                "User",
-                "Course",
-                "Type",
-                "Active",
-                "Price",
-                "Payment",
-                "Transaction",
-                "Actions",
-              ].map((head) => (
-                <TableCell key={head} sx={{ fontWeight: 700 }}>
-                  {head}
-                </TableCell>
-              ))}
-            </TableRow>
-          </TableHead>
+      {/* Loading / Error */}
+      {isLoading ? (
+        <Box display="flex" justifyContent="center" sx={{ py: 6 }}>
+          <CircularProgress />
+        </Box>
+      ) : isError ? (
+        <Alert severity="error">
+          {error?.info?.message || error?.message || "Failed to load subscriptions."}
+        </Alert>
+      ) : (
+        <>
+          {/* Table */}
+          <TableContainer component={Paper}>
+            <Table>
+              <TableHead>
+                <TableRow>
+                  <TableCell>ID</TableCell>
+                  <TableCell>Type</TableCell>
+                  <TableCell>Price</TableCell>
+                  <TableCell>Status</TableCell>
+                  <TableCell>Active</TableCell>
+                  <TableCell>Actions</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {rows.length === 0 ? (
+                  <TableRow>
+                    <TableCell colSpan={6} align="center">
+                      No subscriptions found.
+                    </TableCell>
+                  </TableRow>
+                ) : (
+                  rows .map((r) => (
+                    <TableRow key={r?.subscriptionId}>
+                      <TableCell>{r?.subscriptionId}</TableCell>
+                      <TableCell>{r?.subscriptionType}</TableCell>
+                      <TableCell>{r?.price}</TableCell>
+                      <TableCell>{r?.paymentStatus}</TableCell>
+                      <TableCell>{r?.isActive ? "Yes" : "No"}</TableCell>
+                      <TableCell>
+                        <Tooltip title="Edit">
+                          <IconButton
+                            color="primary"
+                            onClick={() =>
+                              navigate(`/askdaysi/SubscriptionModule/${r?.subscriptionId}`)
+                            }
+                          >
+                            <Edit />
+                          </IconButton>
+                        </Tooltip>
+                        <Tooltip title="Delete">
+                          <IconButton
+                            color="error"
+                            onClick={() => handleDelete(r?.subscriptionId)}
+                            disabled={isDeleting}
+                          >
+                            <Delete />
+                          </IconButton>
+                        </Tooltip>
+                      </TableCell>
+                    </TableRow>
+                  ))
+                )}
+              </TableBody>
+            </Table>
+          </TableContainer>
 
-          <TableBody>
-            {rows.length === 0 && (
-              <TableRow>
-                <TableCell colSpan={9} align="center" sx={{ py: 3 }}>
-                  No subscriptions found.
-                </TableCell>
-              </TableRow>
-            )}
-
-            {rows.map((s) => (
-              <TableRow key={s.subscription_id} hover>
-                <TableCell>{s.subscription_id}</TableCell>
-                <TableCell>{s.user_id}</TableCell>
-                <TableCell>{s.course_id}</TableCell>
-                <TableCell>{s.subscription_type}</TableCell>
-                <TableCell>{s.is_active ? "Yes" : "No"}</TableCell>
-                <TableCell>${s.price}</TableCell>
-                <TableCell>{s.payment_status}</TableCell>
-                <TableCell sx={{ fontFamily: "monospace" }}>
-                  {s.transaction_id}
-                </TableCell>
-
-                <TableCell>
-                  <Tooltip title="Edit">
-                    <IconButton
-                      onClick={() =>
-                        navigate(
-                          `/askdaysi/SubscriptionModule/${s.subscription_id}`
-                        )
-                      }
-                    >
-                      <Edit />
-                    </IconButton>
-                  </Tooltip>
-
-                  <Tooltip title="Delete">
-                    <IconButton
-                      color="error"
-                      onClick={() => handleDelete(s.subscription_id)}
-                    >
-                      <Delete />
-                    </IconButton>
-                  </Tooltip>
-                </TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
-
-      {/* Pagination */}
-      {data?.totalRows > 0 && (
-        <AppPagination
-          current_page={currentPage}
-          current_rowsPerPage={PER_PAGE}
-          totalRows={data.totalRows}
-          onHandleChangePage={handlePage}
-        />
+          {/* Pagination */}
+          {totalRows > 0 && (
+            <AppPagination
+              current_page={page}
+              current_rowsPerPage={PER_PAGE}
+              totalRows={totalRows}
+              onHandleChangePage={handlePageChange}
+            />
+          )}
+        </>
       )}
     </Box>
   );
 }
-

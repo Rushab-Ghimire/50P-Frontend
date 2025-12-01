@@ -119,8 +119,8 @@ export const get_ASKDAYSI_MENU = () => {
           roles: ["sa"],
         },
          {
-          path: "/askdaysi/UserModule",
-          label: "UserModule",
+          path: "/askdaysi/TeacherModule",
+          label: "TeacherModule",
           icon: "edit",
           roles: ["sa"],
         },
