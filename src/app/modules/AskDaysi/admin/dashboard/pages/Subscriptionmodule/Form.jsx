@@ -1,5 +1,4 @@
-// SubscriptionForm.jsx
-import React, { useEffect, useState ,useRef} from "react";
+import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useQuery, useMutation } from "react-query";
 import * as Yup from "yup";
@@ -8,153 +7,129 @@ import {
   Button,
   Stack,
   Typography,
-  Alert,
-  CircularProgress,
-  TextField,
   Paper,
-  Container,
-  FormControl,
-  InputLabel,
+  TextField,
   Select,
   MenuItem,
-  IconButton,
+  FormControl,
+  InputLabel,
+  Checkbox,
+  FormControlLabel,
+  CircularProgress,
+  Alert,
 } from "@mui/material";
-// import SearchOutlinedIcon from "@mui/icons-material/SearchOutlined";
-import { gqlQuery, gqlMutate, queryClient } from "@app/_utilities/http.js";
-import { GET_SUBSCRIPTION, CREATE_SUBSCRIPTION, UPDATE_SUBSCRIPTION } from "./SubscriptionQueries";
 
-// validation schema
-const validationSchema = Yup.object({
-  name: Yup.string().required("name is required"),
-  price: Yup.number().typeError("Must be a number").required("Price are required"),
-  status: Yup.string().required("Status is required"),
- 
+import { gqlQuery, gqlMutate, queryClient } from "@app/_utilities/http";
+import { GET_SUBSCRIPTION, createSubscription, updateSubscription } from "./SubscriptionQueries";
+
+const schema = Yup.object({
+  subscriptionType: Yup.string().required("Type is required"),
+  price: Yup.number().typeError("Must be a number").required("Price is required"),
+  paymentStatus: Yup.string().required("Status is required"),
 });
 
-// Form: 
 export default function SubscriptionForm() {
   const navigate = useNavigate();
-  const params = useParams(); // params.id when editing
-  const [values, setValues] = useState({ name: "",  price: "", status: "" });
-  const [formError, setFormError] = useState({ isError: false, message: "" });
+  const { id } = useParams();
 
+  const [values, setValues] = useState({
+    subscriptionType: "",
+    price: "",
+    paymentStatus: "",
+    isActive: true,
+  });
 
-  // fetch all 
+  const [error, setError] = useState("");
+
   const { isLoading } = useQuery({
-    queryKey: ["SubscriptionModule", params.id],
-    queryFn: ({ signal }) =>
-      gqlQuery({ signal, path: "/graphql", inData: { gql: GET_TRANSACTION(params.id) } }),
-    enabled: !!params.id,
+    queryKey: ["subscription", id],
+    enabled: !!id,
+    queryFn: ({ signal }) => gqlQuery({ signal, path: "/graphql", inData: { gql: GET_SUBSCRIPTION(id) } }),
     onSuccess: (res) => {
-      const rows = res?.allSubscriptions?.rows || [];
-      
-      const item = rows.find((r) => String(r.id) === String(params.id));
-      if (item) {
-        setValues({
-          name: item.name || "",
-          price: item.price ?? "",
-          status: item.status || "",
-          
-        });
-      }
+      if (res?.subscriptionById) setValues(res.subscriptionById);
     },
   });
 
-  // create / update mutation
   const { mutate, isPending } = useMutation({
     mutationFn: gqlMutate,
     onSuccess: () => {
-      queryClient.invalidateQueries(["SubscriptionModule"]);
-      navigate("/askdaysi/SubscriptionModule");
+      queryClient.invalidateQueries(["subscriptions"]);
+      navigate("/SubscriptionModule");
     },
-    onError: (err) => setFormError({ isError: true, message: err?.info?.message || err?.message || "Something went wrong." }),
+    onError: (err) => setError(err.message || "Something went wrong"),
   });
 
-  // submit handler
+  const handleChange = (e) => {
+    const { name, value, type, checked } = e.target;
+    setValues((prev) => ({ ...prev, [name]: type === "checkbox" ? checked : value }));
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setFormError({ isError: false, message: "" });
+    setError("");
+
     try {
-      await validationSchema.validate(values, { abortEarly: false });
-
-      const gql = params.id
-        ? updateSubscription({ ...values, id: params.id })
-        : createSubscription(values);
-
+      await schema.validate(values, { abortEarly: false });
+      const gql = id ? updateSubscription({ ...values, subscriptionId: id }) : createSubscription(values);
       mutate({ path: "/graphql", inData: { gql } });
     } catch (err) {
-      setFormError({ isError: true, message: (err.errors || []).join(", ") || err.message });
+      setError(err.errors ? err.errors.join(", ") : err.message);
     }
   };
 
-  // controlled inputs
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setValues((s) => ({ ...s, [name]: value }));
-  };
-
-  // Keep UI tidy: if user visits /askdaysi/transactions/new then clear any loaded values
-  useEffect(() => {
-    if (!params.id) setValues({ name: "", price: "", status: "" });
-  }, [params.id]);
-
   return (
-    <Container maxWidth="sm" sx={{ py: 5 }}>
-      <Paper sx={{ p: 4, borderRadius: 3, boxShadow: 3 }}>
-        <Typography variant="h5" fontWeight={600} sx={{ mb: 3 }}>
-          {params.id ? "Edit Subscription" : "update Subscription"}
-        </Typography>
-        
-           
-        {formError.isError && <Alert severity="error" sx={{ mb: 2 }}>{formError.message}</Alert>}
+    <Paper sx={{ p: 4, m: 4 }}>
+      <Typography variant="h5">{id ? "Update" : "Add"} Subscription</Typography>
+      {error && <Alert severity="error" sx={{ my: 2 }}>{error}</Alert>}
+      {isLoading ? (
+        <CircularProgress sx={{ mt: 4 }} />
+      ) : (
+        <form onSubmit={handleSubmit}>
+          <Stack spacing={3} sx={{ mt: 2 }}>
+            <FormControl fullWidth>
+              <InputLabel>Type</InputLabel>
+              <Select name="subscriptionType" value={values.subscriptionType} onChange={handleChange}>
+                <MenuItem value="free">Free</MenuItem>
+                <MenuItem value="paid">Paid</MenuItem>
+                <MenuItem value="premium">Premium</MenuItem>
+              </Select>
+            </FormControl>
 
-        {isLoading ? (
-          <Stack alignItems="center" sx={{ py: 4 }}>
-            <CircularProgress />
+            <TextField
+              label="Price"
+              name="price"
+              type="number"
+              value={values.price}
+              onChange={handleChange}
+              fullWidth
+            />
+
+            <FormControl fullWidth>
+              <InputLabel>Status</InputLabel>
+              <Select name="paymentStatus" value={values.paymentStatus} onChange={handleChange}>
+                <MenuItem value="Pending">Pending</MenuItem>
+                <MenuItem value="Completed">Completed</MenuItem>
+                <MenuItem value="Failed">Failed</MenuItem>
+                <MenuItem value="Cancelled">Cancelled</MenuItem>
+              </Select>
+            </FormControl>
+
+            <FormControlLabel
+              control={<Checkbox name="isActive" checked={values.isActive} onChange={handleChange} />}
+              label="Active"
+            />
+
+            <Box display="flex" justifyContent="flex-end" gap={2}>
+              <Button type="submit" variant="contained" disabled={isPending}>
+                {id ? "Update" : "Save"}
+              </Button>
+              <Button variant="outlined" color="error" onClick={() => navigate("/askdaysi/SubscriptionModule")}>
+                Cancel
+              </Button>
+            </Box>
           </Stack>
-        ) : (
-          <form onSubmit={handleSubmit}>
-            <Stack spacing={3}>
-              <TextField
-                label="Name"
-                name="Name"
-                value={values.name}
-                onChange={handleChange}
-                fullWidth
-              />
-
-
-
-              <FormControl fullWidth>
-                <InputLabel>Status</InputLabel>
-                <Select name="status" value={values.status} onChange={handleChange} label="Status">
-                  <MenuItem value="new">New</MenuItem>
-                  
-                  <MenuItem value="completed">Completed</MenuItem>
-                </Select>
-              </FormControl>
-
-              <TextField
-                label="Price"
-                name="Price"
-                type="number"
-                value={values.tokens}
-                onChange={handleChange}
-                fullWidth
-              />
-
-              <Box display="flex" justifyContent="flex-end" gap={2} sx={{ mt: 1 }}>
-                <Button type="submit" variant="contained" disabled={isPending}>
-                  {params.id ? "Update" : "Save"}
-                </Button>
-                <Button variant="outlined" color="error" onClick={() => navigate("/askdaysi/SubsciptionModule")}>
-                  Cancel
-                </Button>
-              </Box>
-            </Stack>
-          </form>
-        )}
-      </Paper>
-    </Container>
+        </form>
+      )}
+    </Paper>
   );
 }

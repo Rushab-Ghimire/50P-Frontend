@@ -1,88 +1,79 @@
 import { PER_PAGE } from "@app/_utilities/constants/paths";
 
-// =====================================
-// Fetch paginated list
-// =====================================
-export const GET_SUBSCRIPTIONS = (search = "", page_num = 1) => `
+// Fetch subscriptions
+export const GET_SUBSCRIPTIONS = (search = "", page = 1) => `
   query {
     allSubscriptions(
       search: "${search}",
-      skip: ${(page_num - 1) * PER_PAGE},
+      skip: ${(page - 1) * PER_PAGE},
       first: ${PER_PAGE}
     ) {
       totalRows
       rows {
-        id
-        name
+        subscriptionId
+        subscriptionType
         price
-        status
+        paymentStatus
+        isActive
       }
     }
   }
 `;
 
-
-// =====================================
 // Fetch single subscription
-// (If backend supports direct fetch)
-// =====================================
 export const GET_SUBSCRIPTION = (id) => `
   query {
-    subscription(id: "${id}") {
-      id
-      name
+    subscriptionById(subscriptionId: ${id}) {
+      subscriptionId
+      subscriptionType
       price
-      status
+      paymentStatus
+      isActive
     }
   }
 `;
 
-
-// =====================================
 // Create subscription
-// =====================================
-export const CREATE_SUBSCRIPTION = (data) => `
+export const createSubscription = (data) => `
   mutation {
-    createSubscription(
-      name: "${data.name}",
+    addSubscription(
+      subscriptionType: "${data.subscriptionType}",
       price: ${data.price},
-      status: "${data.status}"
+      paymentStatus: "${data.paymentStatus}",
+      isActive: ${data.isActive}
     ) {
-      id
-      name
+      subscriptionId
+      subscriptionType
       price
-      status
+      paymentStatus
+      isActive
     }
   }
 `;
 
-
-// =====================================
 // Update subscription
-// =====================================
-export const UPDATE_SUBSCRIPTION = (data) => `
+export const updateSubscription = (data) => `
   mutation {
     updateSubscription(
-      id: "${data.id}",
-      name: "${data.name}",
+      subscriptionId: ${data.subscriptionId},
+      subscriptionType: "${data.subscriptionType}",
       price: ${data.price},
-      status: "${data.status}"
+      paymentStatus: "${data.paymentStatus}",
+      isActive: ${data.isActive}
     ) {
-      id
-      name
+      subscriptionId
+      subscriptionType
       price
-      status
+      paymentStatus
+      isActive
     }
   }
 `;
 
-
-// =====================================
 // Delete subscription
-// =====================================
-export const DELETE_SUBSCRIPTION = (id) => `
+export const deleteSubscription = (id) => `
   mutation {
-    deleteSubscription(id: "${id}") {
+    deleteSubscription(subscriptionId: ${id}) {
       ok
     }
   }

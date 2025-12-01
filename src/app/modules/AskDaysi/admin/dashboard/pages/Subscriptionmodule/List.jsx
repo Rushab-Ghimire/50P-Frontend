@@ -1,96 +1,92 @@
-// SubscriptionList.jsx
 import React, { useState, useRef } from "react";
-
+import { useNavigate } from "react-router-dom";
+import { useQuery, useMutation } from "react-query";
 import {
   Box,
   Button,
+  TextField,
   IconButton,
-  Paper,
   Table,
   TableBody,
   TableCell,
   TableContainer,
   TableHead,
   TableRow,
-  Typography,
+  Paper,
   CircularProgress,
-  Alert,
   Stack,
+  Typography,
   Tooltip,
-  TextField,
+  Alert,
 } from "@mui/material";
-import { Add, Edit, Delete,SearchOutlined } from "@mui/icons-material";
-import { useNavigate } from "react-router-dom";
-import { useQuery, useMutation } from "react-query";
-import { gqlQuery, gqlMutate, queryClient } from "@app/_utilities/http.js";
-import { GET_SUBSCRIPTIONS, DELETE_SUBSCRIPTION } from "./SubscriptionQueries";
+import { Add, Edit, Delete, SearchOutlined } from "@mui/icons-material";
+
+import { gqlQuery, gqlMutate, queryClient } from "@app/_utilities/http";
+import { GET_SUBSCRIPTIONS, deleteSubscription } from "./SubscriptionQueries";
 import { PER_PAGE } from "@app/_utilities/constants/paths";
 import { AppPagination } from "@app/_components/_core";
 
-// SubscriptionList: fetches all, shows table, supports delete + navigation to form
 export default function SubscriptionList() {
   const navigate = useNavigate();
-
-   // added search + pagination states
+  const searchRef = useRef();
   const [searchTerm, setSearchTerm] = useState("");
-  const [currentPage, setCurrentPage] = useState(1);
-  const searchElement = useRef();
+  const [page, setPage] = useState(1);
 
-  // fetch transactions from backend
+  // Fetch subscriptions
   const { data, isLoading, isError, error } = useQuery({
-    queryKey: ["subscriptions",searchTerm, currentPage],
-    queryFn: ({ signal }) =>{
-      const gql = GET_SUBSCRIPTIONS(searchTerm, currentPage);
-    return gqlQuery({ signal, path: "/graphql", inData: { gql } });},
-    keepPreviousData:true,
+    queryKey: ["subscriptions", searchTerm, page],
+    queryFn: ({ signal }) =>
+      gqlQuery({
+        signal,
+        path: "/graphql",
+        inData: { gql: GET_SUBSCRIPTIONS(searchTerm, page) },
+      }),
+    keepPreviousData: true,
   });
 
-  // delete mutation
-  const { mutate: removeTransaction, isPending: isDeleting } = useMutation({
+  // Delete subscription
+  const { mutate: removeSubscription, isLoading: isDeleting } = useMutation({
     mutationFn: gqlMutate,
     onSuccess: () => queryClient.invalidateQueries(["subscriptions"]),
   });
 
   const handleDelete = (id) => {
-    // small confirm before deleting
     if (!window.confirm("Delete this subscription?")) return;
-    const gql = deleteTransaction(id);
-    removeTransaction({ path: "/graphql", inData: { gql } });
+    removeSubscription({ path: "/graphql", inData: { gql: deleteSubscription(id) } });
   };
 
-
-  // new: handle search + pagination
-  const handleSearchSubmit = (e) => {
+  const handleSearch = (e) => {
     e.preventDefault();
-    setSearchTerm(searchElement.current.value || "");
-    setCurrentPage(1);
+    setSearchTerm(searchRef.current?.value || "");
+    setPage(1);
   };
 
-  const handlePage = (newPage) => {
-    setCurrentPage(newPage);
-  };
+  const handlePageChange = (newPage) => setPage(newPage);
 
   const rows = data?.rows || [];
   const totalRows = data?.totalRows || 0;
-  // console.log(data.rows);
+
   return (
     <Box sx={{ p: 4 }}>
+      {/* Header and Add Button */}
       <Stack direction="row" justifyContent="space-between" alignItems="center" sx={{ mb: 3 }}>
-        <Typography variant="h5" fontWeight={600}>Token Subscriptions</Typography>
+        <Typography variant="h5">Subscriptions Module</Typography>
         <Button
           variant="contained"
           startIcon={<Add />}
           onClick={() => navigate("/askdaysi/SubscriptionModule/new")}
         >
-          +Add Transaction
+          Add Subscription
         </Button>
       </Stack>
-       {/*  added search bar */}
-      <Box component="form" onSubmit={handleSearchSubmit} sx={{ mb: 3 }}>
+
+      {/* Search */}
+      <Box component="form" onSubmit={handleSearch} sx={{ mb: 3 }}>
         <TextField
+          inputRef={searchRef}
+          placeholder="Search subscriptions..."
           size="small"
-          inputRef={searchElement}
-          placeholder="Search transactions..."
+          fullWidth
           InputProps={{
             endAdornment: (
               <IconButton type="submit">
@@ -101,65 +97,83 @@ export default function SubscriptionList() {
         />
       </Box>
 
+      {/* Loading / Error */}
       {isLoading ? (
         <Box display="flex" justifyContent="center" sx={{ py: 6 }}>
           <CircularProgress />
         </Box>
       ) : isError ? (
-        <Alert severity="error">{error?.info?.message || error?.message || "Failed to load subscriptions."}</Alert>
+        <Alert severity="error">
+          {error?.info?.message || error?.message || "Failed to load subscriptions."}
+        </Alert>
       ) : (
-        <TableContainer component={Paper} sx={{ borderRadius: 2, boxShadow: 3 }}>
-          <Table>
-            <TableHead>
-              <TableRow sx={{ backgroundColor: "#f5f5f5" }}>
-                <TableCell><strong>ID</strong></TableCell>
-                <TableCell><strong>NAME</strong></TableCell>
-                <TableCell><strong>PRICE</strong></TableCell>
-                <TableCell><strong>Status</strong></TableCell>
-                
-                
-              </TableRow>
-            </TableHead>
-
-            <TableBody>
-              {rows.length === 0 ? (
+        <>
+          {/* Table */}
+          <TableContainer component={Paper}>
+            <Table>
+              <TableHead>
                 <TableRow>
-                  <TableCell colSpan={6} align="center">No transactions found.</TableCell>
+                  <TableCell>ID</TableCell>
+                  <TableCell>Type</TableCell>
+                  <TableCell>Price</TableCell>
+                  <TableCell>Status</TableCell>
+                  <TableCell>Active</TableCell>
+                  <TableCell>Actions</TableCell>
                 </TableRow>
-              ) : (
-                rows.map((r) => (
-                  <TableRow key={r.id} hover>
-                    <TableCell>{r.id}</TableCell>
-                    <TableCell>{r.name}</TableCell>
-                    <TableCell>{r.price}</TableCell>
-                    <TableCell>{r.status}</TableCell>
-                    <TableCell align="center">
-                      <Tooltip title="Edit">
-                        <IconButton color="primary" onClick={() => navigate(`/askdaysi/SubscriptionModule/${r.id}`)}>
-                          <Edit />
-                        </IconButton>
-                      </Tooltip>
-                      <Tooltip title="Delete">
-                        <IconButton color="error" onClick={() => handleDelete(r.id)} disabled={isDeleting}>
-                          <Delete />
-                        </IconButton>
-                      </Tooltip>
+              </TableHead>
+              <TableBody>
+                {rows.length === 0 ? (
+                  <TableRow>
+                    <TableCell colSpan={6} align="center">
+                      No subscriptions found.
                     </TableCell>
                   </TableRow>
-                ))
-              )}
-            </TableBody>
-          </Table>
-        </TableContainer>
-      )}
-      {/* pagination added */}
-      {data?.totalRows > 0 && (
-        <AppPagination
-          current_page={currentPage}
-          current_rowsPerPage={PER_PAGE}
-          totalRows={data.totalRows}
-          onHandleChangePage={handlePage}
-        />
+                ) : (
+                  rows .map((r) => (
+                    <TableRow key={r?.subscriptionId}>
+                      <TableCell>{r?.subscriptionId}</TableCell>
+                      <TableCell>{r?.subscriptionType}</TableCell>
+                      <TableCell>{r?.price}</TableCell>
+                      <TableCell>{r?.paymentStatus}</TableCell>
+                      <TableCell>{r?.isActive ? "Yes" : "No"}</TableCell>
+                      <TableCell>
+                        <Tooltip title="Edit">
+                          <IconButton
+                            color="primary"
+                            onClick={() =>
+                              navigate(`/askdaysi/SubscriptionModule/${r?.subscriptionId}`)
+                            }
+                          >
+                            <Edit />
+                          </IconButton>
+                        </Tooltip>
+                        <Tooltip title="Delete">
+                          <IconButton
+                            color="error"
+                            onClick={() => handleDelete(r?.subscriptionId)}
+                            disabled={isDeleting}
+                          >
+                            <Delete />
+                          </IconButton>
+                        </Tooltip>
+                      </TableCell>
+                    </TableRow>
+                  ))
+                )}
+              </TableBody>
+            </Table>
+          </TableContainer>
+
+          {/* Pagination */}
+          {totalRows > 0 && (
+            <AppPagination
+              current_page={page}
+              current_rowsPerPage={PER_PAGE}
+              totalRows={totalRows}
+              onHandleChangePage={handlePageChange}
+            />
+          )}
+        </>
       )}
     </Box>
   );
