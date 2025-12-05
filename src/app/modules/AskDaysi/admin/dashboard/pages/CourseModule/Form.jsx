@@ -1,33 +1,22 @@
-
-import React, { useEffect, useState } from "react";
-import { useParams, useNavigate } from "react-router-dom";
-import { useQuery, useMutation } from "react-query";
-import * as Yup from "yup";
+import React, { useState } from "react";
 import {
-  Box,
-  Button,
-  Stack,
-  Typography,
-  Alert,
-  CircularProgress,
-  TextField,
-  Paper,
-  Container,
-  FormControl,
-  InputLabel,
-  Select,
-  MenuItem
+  Box, Button, Stack, Typography, Alert, CircularProgress,
+  TextField, Paper, Container
 } from "@mui/material";
 
-import { gqlQuery, gqlMutate, queryClient } from "@app/_utilities/http.js";
+import { useNavigate, useParams } from "react-router-dom";
+import { useQuery, useMutation } from "react-query";
+import * as Yup from "yup";
+
+import { gqlQuery, gqlMutate, queryClient } from "@app/_utilities/http";
 import { GET_COURSE, createCourse, updateCourse } from "./CourseQueries";
 
-// Validation
+// VALIDATION
 const validationSchema = Yup.object({
-  courseName: Yup.string().required("Course name is required"),
+  courseName: Yup.string().required("Course Name is required"),
   level: Yup.string().required("Level is required"),
-  duration: Yup.number().typeError("Duration must be a number").required("Duration is required"),
   teacherId: Yup.string().required("Teacher is required"),
+  duration: Yup.number().required("Duration (days) is required"),
 });
 
 export default function CourseForm() {
@@ -37,50 +26,52 @@ export default function CourseForm() {
   const [values, setValues] = useState({
     courseName: "",
     level: "",
-    duration: "",
     teacherId: "",
+    duration: "",
   });
 
-  const [formError, setFormError] = useState({ isError: false, message: "" });
+  const [formError, setFormError] = useState({
+    isError: false,
+    message: "",
+  });
 
-  // ---------------------------- FETCH COURSE BY ID ------------------------
+  // LOAD COURSE FOR EDIT
   const { isLoading } = useQuery({
-    queryKey: ["courses", params.id],
+    queryKey: ["course", params.id],
+    enabled: !!params.id,
     queryFn: ({ signal }) =>
       gqlQuery({
         signal,
         path: "/graphql",
-        inData: { gql: GET_COURSE(params.id) }
+        inData: { gql: GET_COURSE(params.id) },
       }),
-    enabled: !!params.id,
     onSuccess: (res) => {
-      const item = res?.allCourseById;
-      if (item) {
+      const c = res?.allrourseById;
+      if (c) {
         setValues({
-          courseName: item.courseName || "",
-          level: item.level || "",
-          duration: item.duration || "",
-          teacherId: item.teacher?.id || "",
+          courseName: c.courseName || "",
+          level: c.level || "",
+          duration: c.duration || "",
+          teacherId: c.teacher?.uniqueId || "",
         });
       }
     },
   });
 
-  // ---------------------------- CREATE / UPDATE ------------------------
+  // CREATE / UPDATE
   const { mutate, isPending } = useMutation({
     mutationFn: gqlMutate,
     onSuccess: () => {
-      queryClient.invalidateQueries(["courses"]);
+      queryClient.invalidateQueries(["course"]);
       navigate("/askdaysi/CourseModule");
     },
     onError: (err) =>
       setFormError({
         isError: true,
-        message: err?.info?.message || err?.message || "Something went wrong."
+        message: err?.info?.message || err.message || "Something went wrong.",
       }),
   });
 
-  // ---------------------------- SUBMIT HANDLER ------------------------
   const handleSubmit = async (e) => {
     e.preventDefault();
     setFormError({ isError: false, message: "" });
@@ -94,36 +85,22 @@ export default function CourseForm() {
 
       mutate({ path: "/graphql", inData: { gql } });
     } catch (err) {
-      setFormError({
-        isError: true,
-        message: err.errors?.join(", ") || err.message
-      });
+      setFormError({ isError: true, message: err.errors.join(", ") });
     }
   };
 
-  // ---------------------------- INPUT CHANGE ------------------------
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setValues((s) => ({ ...s, [name]: value }));
-  };
-
-  useEffect(() => {
-    if (!params.id) {
-      setValues({ courseName: "", level: "", duration: "", teacherId: "" });
-    }
-  }, [params.id]);
+  const handleChange = (e) =>
+    setValues((prev) => ({ ...prev, [e.target.name]: e.target.value }));
 
   return (
     <Container maxWidth="sm" sx={{ py: 5 }}>
-      <Paper sx={{ p: 4, borderRadius: 3, boxShadow: 3 }}>
-        <Typography variant="h5" fontWeight={600} sx={{ mb: 3 }}>
+      <Paper sx={{ p: 4, borderRadius: 3 }}>
+        <Typography variant="h5" sx={{ mb: 3 }}>
           {params.id ? "Edit Course" : "Add Course"}
         </Typography>
 
         {formError.isError && (
-          <Alert severity="error" sx={{ mb: 2 }}>
-            {formError.message}
-          </Alert>
+          <Alert severity="error">{formError.message}</Alert>
         )}
 
         {isLoading ? (
@@ -141,24 +118,17 @@ export default function CourseForm() {
                 fullWidth
               />
 
-              <FormControl fullWidth>
-                <InputLabel>Level</InputLabel>
-                <Select
-                  name="level"
-                  value={values.level}
-                  label="Level"
-                  onChange={handleChange}
-                >
-                  <MenuItem value="Beginner">Beginner</MenuItem>
-                  <MenuItem value="Intermediate">Intermediate</MenuItem>
-                  <MenuItem value="Advanced">Advanced</MenuItem>
-                </Select>
-              </FormControl>
+              <TextField
+                label="Level"
+                name="level"
+                value={values.level}
+                onChange={handleChange}
+                fullWidth
+              />
 
               <TextField
-                label="Duration"
+                label="Duration (Days)"
                 name="duration"
-                type="number"
                 value={values.duration}
                 onChange={handleChange}
                 fullWidth
@@ -176,9 +146,10 @@ export default function CourseForm() {
                 <Button type="submit" variant="contained" disabled={isPending}>
                   {params.id ? "Update" : "Save"}
                 </Button>
+
                 <Button
-                  variant="outlined"
                   color="error"
+                  variant="outlined"
                   onClick={() => navigate("/askdaysi/CourseModule")}
                 >
                   Cancel
@@ -191,4 +162,3 @@ export default function CourseForm() {
     </Container>
   );
 }
-

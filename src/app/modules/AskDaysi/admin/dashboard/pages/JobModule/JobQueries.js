@@ -1,46 +1,53 @@
-// JobQueries.js
 import { PER_PAGE } from "@app/_utilities/constants/paths";
 
-// LIST QUERY (with search + pagination)
-export const GET_JOBS = (search = "", page_num = 1) => `
-{
-  allJobs(search: "${search}", skip: ${(page_num - 1) * PER_PAGE}, first: ${PER_PAGE}) {
-    totalRows
-    rows {
-      jobId
-      jobTitle
-      description
-      qualification
-      location
-      salary
-      employmentType
-      category
-      experience
+/* ============================
+   GET ALL JOBS (Pagination + Search)
+   ============================ */
+export const GET_JOBS = (search = "", page = 1) => `
+query {
+  allJobs(
+    search: "${search}"
+    skip: ${(page - 1) * PER_PAGE}
+    first: ${PER_PAGE}
+  ) {
+      totalRows
+      rows {
+        jobId
+        jobTitle
+        description
+        qualification
+        location
+        salary
+        employmentType
+        category
+        experience
     }
   }
 }
 `;
 
-// SINGLE JOB (fetch all and filter client-side)
+/* ============================
+   GET JOB BY ID
+   ============================ */
 export const GET_JOB = (id) => `
-{
-  allJobs {
-    rows {
-      jobId
-      jobTitle
-      description
-      qualification
-      location
-      salary
-      employmentType
-      category
-      experience
-    }
+query {
+  getJobById(jobId: ${id}) {
+    jobId
+    jobTitle
+    description
+    qualification
+    location
+    salary
+    employmentType
+    category
+    experience
   }
 }
 `;
 
-// CREATE JOB
+/* ============================
+   CREATE JOB
+   ============================ */
 export const createJob = (data) => `
 mutation {
   createJob(
@@ -56,12 +63,17 @@ mutation {
     job {
       jobId
       jobTitle
+      category
+      location
+      salary
     }
   }
 }
 `;
 
-// UPDATE JOB
+/* ============================
+   UPDATE JOB
+   ============================ */
 export const updateJob = (data) => `
 mutation {
   updateJob(
@@ -78,19 +90,17 @@ mutation {
     job {
       jobId
       jobTitle
-      description
-      qualification
+      category
       location
       salary
-      employmentType
-      category
-      experience
     }
   }
 }
 `;
 
-// DELETE JOB
+/* ============================
+   DELETE JOB
+   ============================ */
 export const deleteJob = (id) => `
 mutation {
   deleteJob(jobId: ${id}) {
@@ -98,5 +108,3 @@ mutation {
   }
 }
 `;
-
-

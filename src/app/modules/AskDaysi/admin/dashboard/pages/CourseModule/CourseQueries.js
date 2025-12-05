@@ -1,103 +1,97 @@
-// CourseQueries.js
 import { PER_PAGE } from "@app/_utilities/constants/paths";
 
-// ---------------------
-// Fetch Paginated Courses
-// ---------------------
-export const GET_COURSES = (search = "", page_num = 1) => `
-{
+/* ============================
+   GET ALL COURSES
+   ============================ */
+export const GET_COURSES = (search = "", page = 1) => `
+query {
   allCourses(
     search: "${search}",
-    skip: ${(page_num - 1) * PER_PAGE},
+    skip: ${(page - 1) * PER_PAGE},
     first: ${PER_PAGE}
   ) {
     totalRows
     rows {
       id
+      courseId
       courseName
       level
       duration
       teacher {
+        id
         uniqueId
-        name
+        firstName
       }
     }
   }
 }
 `;
 
-// ---------------------
-// Fetch a Single Course by ID
-// ---------------------
+/* ============================
+   GET COURSE BY ID
+   ============================ */
 export const GET_COURSE = (id) => `
-{
+query {
   allCourseById(id: ${id}) {
     id
+    courseId
     courseName
     level
     duration
     teacher {
+      id
       uniqueId
-      name
+      firstName
+  
     }
   }
 }
 `;
 
-// ---------------------
-// Create a New Course
-// ---------------------
+/* ============================
+   CREATE COURSE
+   ============================ */
 export const createCourse = (data) => `
 mutation {
   addCourse(
     courseName: "${data.courseName}",
     level: "${data.level}",
-    duration: ${data.duration},
-    teacherId: "${data.teacherId}"
+    teacherId: "${data.teacherId}",
+    duration: ${data.duration}
   ) {
     course {
       id
       courseName
       level
-      duration
-      teacher {
-        uniqueId
-        name
-      }
     }
   }
 }
 `;
 
-// ---------------------
-// Update Existing Course
-// ---------------------
+/* ============================
+   UPDATE COURSE
+   ============================ */
 export const updateCourse = (data) => `
 mutation {
   updateCourse(
     courseId: ${data.id},
     courseName: "${data.courseName}",
     level: "${data.level}",
-    duration: ${data.duration},
-    teacherId: "${data.teacherId}"
+    teacherId: "${data.teacherId}",
+    duration: ${data.duration}
   ) {
     course {
       id
       courseName
       level
-      duration
-      teacher {
-        uniqueId
-        name
-      }
     }
   }
 }
 `;
 
-// ---------------------
-// Delete Course
-// ---------------------
+/* ============================
+   DELETE COURSE
+   ============================ */
 export const deleteCourse = (id) => `
 mutation {
   deleteCourse(id: ${id}) {
