@@ -1,78 +1,164 @@
-// form.jsx
 import React, { useState } from "react";
 import {
-  Box,
-  Button,
-  Stack,
-  Typography,
-  Alert,
-  TextField,
-  Paper,
-  Container,
-  FormControl,
-  InputLabel,
-  Select,
-  MenuItem,
+  Box, Button, Stack, Typography, Alert, CircularProgress,
+  TextField, Paper, Container
 } from "@mui/material";
 
+import { useNavigate, useParams } from "react-router-dom";
+import { useQuery, useMutation } from "react-query";
+import * as Yup from "yup";
+
+import { gqlQuery, gqlMutate, queryClient } from "@app/_utilities/http";
+import { GET_COURSE, createCourse, updateCourse } from "./CourseQueries";
+
+// VALIDATION
+const validationSchema = Yup.object({
+  courseName: Yup.string().required("Course Name is required"),
+  level: Yup.string().required("Level is required"),
+  teacherId: Yup.string().required("Teacher is required"),
+  duration: Yup.number().required("Duration (days) is required"),
+});
+
 export default function CourseForm() {
+  const navigate = useNavigate();
+  const params = useParams();
+
   const [values, setValues] = useState({
-    course_name: "",
-    teacher: "",
+    courseName: "",
+    level: "",
+    teacherId: "",
     duration: "",
-    level: "Beginner",
   });
 
-  const [formError, setFormError] = useState({ isError: false, message: "" });
+  const [formError, setFormError] = useState({
+    isError: false,
+    message: "",
+  });
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setValues((prev) => ({ ...prev, [name]: value }));
-  };
+  // LOAD COURSE FOR EDIT
+  const { isLoading } = useQuery({
+    queryKey: ["course", params.id],
+    enabled: !!params.id,
+    queryFn: ({ signal }) =>
+      gqlQuery({
+        signal,
+        path: "/graphql",
+        inData: { gql: GET_COURSE(params.id) },
+      }),
+    onSuccess: (res) => {
+      const c = res?.allrourseById;
+      if (c) {
+        setValues({
+          courseName: c.courseName || "",
+          level: c.level || "",
+          duration: c.duration || "",
+          teacherId: c.teacher?.uniqueId || "",
+        });
+      }
+    },
+  });
 
-  const handleSubmit = (e) => {
+  // CREATE / UPDATE
+  const { mutate, isPending } = useMutation({
+    mutationFn: gqlMutate,
+    onSuccess: () => {
+      queryClient.invalidateQueries(["course"]);
+      navigate("/askdaysi/CourseModule");
+    },
+    onError: (err) =>
+      setFormError({
+        isError: true,
+        message: err?.info?.message || err.message || "Something went wrong.",
+      }),
+  });
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!values.course_name) {
-      return setFormError({ isError: true, message: "Course name is required." });
+    setFormError({ isError: false, message: "" });
+
+    try {
+      await validationSchema.validate(values, { abortEarly: false });
+
+      const gql = params.id
+        ? updateCourse({ ...values, id: params.id })
+        : createCourse(values);
+
+      mutate({ path: "/graphql", inData: { gql } });
+    } catch (err) {
+      setFormError({ isError: true, message: err.errors.join(", ") });
     }
-    alert("Course saved (dummy logic)!");
   };
+
+  const handleChange = (e) =>
+    setValues((prev) => ({ ...prev, [e.target.name]: e.target.value }));
 
   return (
     <Container maxWidth="sm" sx={{ py: 5 }}>
-      <Paper sx={{ p: 4, borderRadius: 3, boxShadow: 3 }}>
-        <Typography variant="h5" fontWeight={600} sx={{ mb: 3 }}>
-          Add / Edit Course
+      <Paper sx={{ p: 4, borderRadius: 3 }}>
+        <Typography variant="h5" sx={{ mb: 3 }}>
+          {params.id ? "Edit Course" : "Add Course"}
         </Typography>
 
-        {formError.isError && <Alert severity="error" sx={{ mb: 2 }}>{formError.message}</Alert>}
+        {formError.isError && (
+          <Alert severity="error">{formError.message}</Alert>
+        )}
 
-        <form onSubmit={handleSubmit}>
-          <Stack spacing={3}>
-            <TextField label="Course Name" name="course_name" value={values.course_name} onChange={handleChange} fullWidth />
-
-            <TextField label="Teacher" name="teacher" value={values.teacher} onChange={handleChange} fullWidth />
-
-            <TextField label="Duration" name="duration" value={values.duration} onChange={handleChange} fullWidth />
-
-            <FormControl fullWidth>
-              <InputLabel>Level</InputLabel>
-              <Select name="level" value={values.level} label="Level" onChange={handleChange}>
-                <MenuItem value="Beginner">Beginner</MenuItem>
-                <MenuItem value="Intermediate">Intermediate</MenuItem>
-                <MenuItem value="Advanced">Advanced</MenuItem>
-              </Select>
-            </FormControl>
-
-            <Box display="flex" justifyContent="flex-end" gap={2} sx={{ mt: 1 }}>
-              <Button type="submit" variant="contained">Save</Button>
-              <Button variant="outlined" color="error">Cancel</Button>
-            </Box>
+        {isLoading ? (
+          <Stack alignItems="center" sx={{ py: 4 }}>
+            <CircularProgress />
           </Stack>
-        </form>
+        ) : (
+          <form onSubmit={handleSubmit}>
+            <Stack spacing={3}>
+              <TextField
+                label="Course Name"
+                name="courseName"
+                value={values.courseName}
+                onChange={handleChange}
+                fullWidth
+              />
+
+              <TextField
+                label="Level"
+                name="level"
+                value={values.level}
+                onChange={handleChange}
+                fullWidth
+              />
+
+              <TextField
+                label="Duration (Days)"
+                name="duration"
+                value={values.duration}
+                onChange={handleChange}
+                fullWidth
+              />
+
+              <TextField
+                label="Teacher ID"
+                name="teacherId"
+                value={values.teacherId}
+                onChange={handleChange}
+                fullWidth
+              />
+
+              <Box display="flex" justifyContent="flex-end" gap={2}>
+                <Button type="submit" variant="contained" disabled={isPending}>
+                  {params.id ? "Update" : "Save"}
+                </Button>
+
+                <Button
+                  color="error"
+                  variant="outlined"
+                  onClick={() => navigate("/askdaysi/CourseModule")}
+                >
+                  Cancel
+                </Button>
+              </Box>
+            </Stack>
+          </form>
+        )}
       </Paper>
     </Container>
   );
 }
-
-

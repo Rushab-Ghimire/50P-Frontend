@@ -1,70 +1,109 @@
-// TransactionQueries.js
-// Simple, backend-matching GraphQL strings (snake_case names to match your Graphene schema)list
 import { PER_PAGE } from "@app/_utilities/constants/paths";
 
-export const GET_TRANSACTIONS = (search = "", page_num = 1) => `
-{
-  allTokensTransactions(search: "${search}", skip: ${(page_num - 1) * PER_PAGE}, first: ${PER_PAGE}) {
-    totalRows
-    rows {
-      id
-      moduleCode
-      status
-      tokens
-      uniqueId
+/* ============================
+   GET ALL JOBS (Pagination + Search)
+   ============================ */
+export const GET_JOBS = (search = "", page = 1) => `
+query {
+  allJobs(
+    search: "${search}"
+    skip: ${(page - 1) * PER_PAGE}
+    first: ${PER_PAGE}
+  ) {
+      totalRows
+      rows {
+        jobId
+        jobTitle
+        description
+        qualification
+        location
+        salary
+        employmentType
+        category
+        experience
     }
   }
 }
 `;
 
-
-// There is no single-item query on backend, so fetch all and pick client-side.[form]
-export const GET_TRANSACTION = (id) => `
-{
-  allTokensTransactions {
-    rows {
-      id
-      moduleCode
-      status
-      tokens
-      uniqueID
-      
-    }
+/* ============================
+   GET JOB BY ID
+   ============================ */
+export const GET_JOB = (id) => `
+query {
+  getJobById(jobId: ${id}) {
+    jobId
+    jobTitle
+    description
+    qualification
+    location
+    salary
+    employmentType
+    category
+    experience
   }
 }
 `;
 
-// Create (calls add_transaction)
-export const createTransaction = (data) => `
+/* ============================
+   CREATE JOB
+   ============================ */
+export const createJob = (data) => `
 mutation {
-  addTransaction(moduleCode: "${data.moduleCode}", status: "${data.status}", tokens: ${data.tokens}) {
-    transaction {
-      moduleCode
-      status
-      tokens
+  createJob(
+    jobTitle: "${data.jobTitle}",
+    description: "${data.description}",
+    qualification: "${data.qualification}",
+    location: "${data.location}",
+    salary: "${data.salary}",
+    employmentType: "${data.employmentType}",
+    category: "${data.category}",
+    experience: "${data.experience}"
+  ) {
+    job {
+      jobId
+      jobTitle
+      category
+      location
+      salary
     }
   }
 }
 `;
 
-// Update (calls update_transaction)
-export const updateTransaction = (data) => `
+/* ============================
+   UPDATE JOB
+   ============================ */
+export const updateJob = (data) => `
 mutation {
-  updateTransaction(id: ${data.id}, moduleCode: "${data.moduleCode}", status: "${data.status}", tokens: ${data.tokens}) {
-    transaction {
-      id
-      moduleCode
-      status
-      tokens
+  updateJob(
+    jobId: ${data.jobId},
+    jobTitle: "${data.jobTitle}",
+    description: "${data.description}",
+    qualification: "${data.qualification}",
+    location: "${data.location}",
+    salary: "${data.salary}",
+    employmentType: "${data.employmentType}",
+    category: "${data.category}",
+    experience: "${data.experience}"
+  ) {
+    job {
+      jobId
+      jobTitle
+      category
+      location
+      salary
     }
   }
 }
 `;
 
-// Delete (calls delete_transaction)
-export const deleteTransaction = (id) => `
+/* ============================
+   DELETE JOB
+   ============================ */
+export const deleteJob = (id) => `
 mutation {
-  deleteTransaction(id: ${id}) {
+  deleteJob(jobId: ${id}) {
     ok
   }
 }
